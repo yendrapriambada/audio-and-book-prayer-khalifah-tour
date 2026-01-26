@@ -23,7 +23,7 @@ export function BackButton({ label = "Kembali", to }: BackButtonProps) {
       className="back-button"
       aria-label={label}
     >
-      <ChevronLeft className="w-6 h-6" strokeWidth={2.5} />
+      <ChevronLeft className="w-5 h-5" strokeWidth={2} />
       <span>{label}</span>
     </button>
   );

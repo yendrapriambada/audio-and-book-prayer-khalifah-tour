@@ -1,4 +1,4 @@
-import { LucideIcon } from "lucide-react";
+import { LucideIcon, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface ActionCardProps {
@@ -18,27 +18,24 @@ export function ActionCard({
 }: ActionCardProps) {
   const bgClass = variant === "primary" 
     ? "bg-primary" 
-    : "bg-secondary";
-  
-  const textClass = variant === "primary"
-    ? "text-primary-foreground"
-    : "text-secondary-foreground";
+    : "bg-primary";
 
   return (
     <Link
       to={to}
-      className={`${bgClass} ${textClass} rounded-3xl p-8 shadow-xl transition-all duration-200 active:scale-[0.98] block`}
+      className={`${bgClass} text-primary-foreground rounded-xl p-4 transition-all duration-150 active:scale-[0.99] block`}
     >
-      <div className="flex flex-col items-center text-center gap-4">
-        <div className="w-20 h-20 rounded-2xl bg-white/20 flex items-center justify-center">
-          <Icon className="w-10 h-10" strokeWidth={2} />
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0">
+          <Icon className="w-5 h-5" strokeWidth={2} />
         </div>
-        <div>
-          <h2 className="text-2xl font-bold mb-1">{title}</h2>
+        <div className="flex-1 min-w-0">
+          <h2 className="text-base font-semibold">{title}</h2>
           {description && (
-            <p className="text-lg opacity-90">{description}</p>
+            <p className="text-xs opacity-80">{description}</p>
           )}
         </div>
+        <ChevronRight className="w-5 h-5 opacity-60 flex-shrink-0" />
       </div>
     </Link>
   );
