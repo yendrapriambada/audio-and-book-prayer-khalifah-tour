@@ -1,4 +1,4 @@
-import { LucideIcon, ChevronRight } from "lucide-react";
+import { LucideIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface ActionCardProps {
@@ -16,26 +16,25 @@ export function ActionCard({
   to, 
   variant = "primary" 
 }: ActionCardProps) {
-  const bgClass = variant === "primary" 
-    ? "bg-primary" 
-    : "bg-primary";
+  const gradientClass = variant === "primary" 
+    ? "bg-gradient-to-br from-[hsl(168,80%,38%)] to-[hsl(180,70%,45%)]" 
+    : "bg-gradient-to-br from-[hsl(24,95%,55%)] to-[hsl(35,95%,60%)]";
 
   return (
     <Link
       to={to}
-      className={`${bgClass} text-primary-foreground rounded-xl p-4 transition-all duration-150 active:scale-[0.99] block`}
+      className={`${gradientClass} text-white rounded-2xl p-6 shadow-lg transition-all duration-150 active:scale-[0.98] block flex-1`}
     >
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0">
-          <Icon className="w-5 h-5" strokeWidth={2} />
+      <div className="flex flex-col items-center text-center gap-3 py-4">
+        <div className="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center">
+          <Icon className="w-8 h-8" strokeWidth={1.5} />
         </div>
-        <div className="flex-1 min-w-0">
-          <h2 className="text-base font-semibold">{title}</h2>
+        <div>
+          <h2 className="text-xl font-semibold">{title}</h2>
           {description && (
-            <p className="text-xs opacity-80">{description}</p>
+            <p className="text-sm opacity-90 mt-1">{description}</p>
           )}
         </div>
-        <ChevronRight className="w-5 h-5 opacity-60 flex-shrink-0" />
       </div>
     </Link>
   );
