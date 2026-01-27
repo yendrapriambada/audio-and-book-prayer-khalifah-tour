@@ -2,81 +2,78 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @layer base {
   :root {
-    /* Islamic-inspired warm palette for elderly users */
-    --background: 40 33% 97%;
-    --foreground: 150 40% 12%;
+    /* Modern vibrant palette */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 34%;
 
-    --card: 40 30% 95%;
-    --card-foreground: 150 40% 12%;
+    --card: 0 0% 98%;
+    --card-foreground: 0 0% 34%;
 
-    --popover: 40 30% 95%;
-    --popover-foreground: 150 40% 12%;
+    --popover: 0 0% 98%;
+    --popover-foreground: 0 0% 34%;
 
-    /* Emerald green - primary Islamic color */
-    --primary: 160 84% 25%;
-    --primary-foreground: 40 33% 98%;
+    /* Primary: #D7007F - Magenta Pink */
+    --primary: 328 100% 42%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Warm gold accent */
-    --secondary: 43 74% 49%;
-    --secondary-foreground: 40 33% 98%;
+    /* Secondary: Gray #575756 */
+    --secondary: 60 1% 34%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 40 20% 90%;
-    --muted-foreground: 150 20% 35%;
+    --muted: 0 0% 95%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 43 74% 49%;
-    --accent-foreground: 150 40% 12%;
+    --accent: 328 100% 95%;
+    --accent-foreground: 328 100% 42%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 40 33% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 150 20% 80%;
-    --input: 150 20% 80%;
-    --ring: 160 84% 25%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 328 100% 42%;
 
-    --radius: 1rem;
+    --radius: 0.75rem;
 
-    /* Custom tokens for this app */
-    --surface-warm: 40 40% 92%;
-    --text-large: 1.25rem;
-    --text-title: 1.75rem;
-    --text-hero: 2.25rem;
-    --min-touch-target: 56px;
+    /* Custom tokens */
+    --surface-warm: 0 0% 97%;
+    --min-touch-target: 44px;
   }
 
   .dark {
-    --background: 150 30% 8%;
-    --foreground: 40 33% 95%;
+    --background: 0 0% 8%;
+    --foreground: 0 0% 95%;
 
-    --card: 150 25% 12%;
-    --card-foreground: 40 33% 95%;
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 95%;
 
-    --popover: 150 25% 12%;
-    --popover-foreground: 40 33% 95%;
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 95%;
 
-    --primary: 160 70% 40%;
-    --primary-foreground: 40 33% 98%;
+    --primary: 328 100% 50%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 43 74% 49%;
-    --secondary-foreground: 40 33% 98%;
+    --secondary: 0 0% 45%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 150 20% 20%;
-    --muted-foreground: 40 20% 70%;
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 70%;
 
-    --accent: 43 74% 49%;
-    --accent-foreground: 40 33% 98%;
+    --accent: 328 100% 20%;
+    --accent-foreground: 328 100% 70%;
 
     --destructive: 0 62% 50%;
-    --destructive-foreground: 40 33% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 150 20% 25%;
-    --input: 150 20% 25%;
-    --ring: 160 70% 40%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 328 100% 50%;
 
-    --surface-warm: 150 20% 15%;
+    --surface-warm: 0 0% 15%;
   }
 }
 
@@ -92,7 +89,7 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'Noto Sans', system-ui, sans-serif;
+    font-family: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
     min-height: 100dvh;
   }
 }
