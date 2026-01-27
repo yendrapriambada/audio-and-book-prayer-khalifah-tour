@@ -3,11 +3,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
-import { Plus, Edit, Trash2, Music, ChevronDown, ChevronRight } from 'lucide-react';
-import { useData } from '@/context/DataContext';
+import { Plus, Edit, Trash2, Music, ChevronDown, ChevronRight, Loader2 } from 'lucide-react';
+import { useData, Playlist, Track } from '@/context/DataContext';
 import { PlaylistForm } from './PlaylistForm';
 import { TrackForm } from './TrackForm';
-import { Playlist, AudioTrack } from '@/data/playlists';
 import { deleteStorageFile } from '@/lib/storageUtils';
 import {
   AlertDialog,
@@ -26,15 +25,26 @@ import {
 } from '@/components/ui/collapsible';
 
 export function AudioManager() {
-  const { playlists, addPlaylist, updatePlaylist, deletePlaylist, togglePlaylistStatus, addTrack, updateTrack, deleteTrack } = useData();
+  const { 
+    playlists, 
+    isLoadingPlaylists,
+    addPlaylist, 
+    updatePlaylist, 
+    deletePlaylist, 
+    togglePlaylistStatus, 
+    addTrack, 
+    updateTrack, 
+    deleteTrack 
+  } = useData();
   
   const [playlistFormOpen, setPlaylistFormOpen] = useState(false);
   const [trackFormOpen, setTrackFormOpen] = useState(false);
   const [editingPlaylist, setEditingPlaylist] = useState<Playlist | null>(null);
-  const [editingTrack, setEditingTrack] = useState<{ playlistId: string; track: AudioTrack } | null>(null);
+  const [editingTrack, setEditingTrack] = useState<{ playlistId: string; track: Track } | null>(null);
   const [selectedPlaylistId, setSelectedPlaylistId] = useState<string | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<{ type: 'playlist' | 'track'; id: string; playlistId?: string } | null>(null);
   const [expandedPlaylists, setExpandedPlaylists] = useState<Set<string>>(new Set());
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const toggleExpanded = (id: string) => {
     setExpandedPlaylists((prev) => {
@@ -58,11 +68,11 @@ export function AudioManager() {
     setPlaylistFormOpen(true);
   };
 
-  const handlePlaylistSubmit = (data: { title: string; description: string; isActive: boolean }) => {
+  const handlePlaylistSubmit = async (data: { title: string; description: string; is_active: boolean }) => {
     if (editingPlaylist) {
-      updatePlaylist(editingPlaylist.id, data);
+      await updatePlaylist(editingPlaylist.id, data);
     } else {
-      addPlaylist({ ...data, tracks: [], isActive: data.isActive });
+      await addPlaylist({ ...data });
     }
   };
 
@@ -72,7 +82,7 @@ export function AudioManager() {
     setTrackFormOpen(true);
   };
 
-  const handleEditTrack = (playlistId: string, track: AudioTrack) => {
+  const handleEditTrack = (playlistId: string, track: Track) => {
     setSelectedPlaylistId(playlistId);
     setEditingTrack({ playlistId, track });
     setTrackFormOpen(true);
@@ -85,35 +95,48 @@ export function AudioManager() {
     }
     
     if (editingTrack) {
-      updateTrack(editingTrack.playlistId, editingTrack.track.id, { title: data.title, src: data.src });
+      await updateTrack(editingTrack.track.id, { title: data.title, src: data.src });
     } else if (selectedPlaylistId) {
-      addTrack(selectedPlaylistId, { title: data.title, src: data.src });
+      await addTrack(selectedPlaylistId, { title: data.title, src: data.src });
     }
   };
 
   const handleDeleteConfirm = async () => {
     if (!deleteConfirm) return;
     
-    if (deleteConfirm.type === 'playlist') {
-      // Delete all audio files in the playlist from storage
-      const playlist = playlists.find(p => p.id === deleteConfirm.id);
-      if (playlist) {
-        for (const track of playlist.tracks) {
+    setIsDeleting(true);
+    try {
+      if (deleteConfirm.type === 'playlist') {
+        // Delete all audio files in the playlist from storage
+        const playlist = playlists.find(p => p.id === deleteConfirm.id);
+        if (playlist && playlist.tracks) {
+          for (const track of playlist.tracks) {
+            await deleteStorageFile('audio', track.src);
+          }
+        }
+        await deletePlaylist(deleteConfirm.id);
+      } else if (deleteConfirm.playlistId) {
+        // Delete single track's audio file from storage
+        const playlist = playlists.find(p => p.id === deleteConfirm.playlistId);
+        const track = playlist?.tracks?.find(t => t.id === deleteConfirm.id);
+        if (track) {
           await deleteStorageFile('audio', track.src);
         }
+        await deleteTrack(deleteConfirm.id);
       }
-      deletePlaylist(deleteConfirm.id);
-    } else if (deleteConfirm.playlistId) {
-      // Delete single track's audio file from storage
-      const playlist = playlists.find(p => p.id === deleteConfirm.playlistId);
-      const track = playlist?.tracks.find(t => t.id === deleteConfirm.id);
-      if (track) {
-        await deleteStorageFile('audio', track.src);
-      }
-      deleteTrack(deleteConfirm.playlistId, deleteConfirm.id);
+    } finally {
+      setIsDeleting(false);
+      setDeleteConfirm(null);
     }
-    setDeleteConfirm(null);
   };
+
+  if (isLoadingPlaylists) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -127,7 +150,7 @@ export function AudioManager() {
 
       <div className="space-y-3">
         {playlists.map((playlist) => {
-          const isActive = playlist.isActive ?? true;
+          const isActive = playlist.is_active;
           return (
             <Card key={playlist.id} className={`overflow-hidden ${!isActive ? 'opacity-60' : ''}`}>
             <Collapsible
@@ -147,7 +170,7 @@ export function AudioManager() {
                         <div>
                           <CardTitle className="text-base">{playlist.title}</CardTitle>
                           <p className="text-xs text-muted-foreground">
-                            {playlist.tracks.length} audio
+                            {playlist.tracks?.length || 0} audio
                           </p>
                         </div>
                         <Badge variant={isActive ? "default" : "secondary"} className="text-xs">
@@ -159,7 +182,7 @@ export function AudioManager() {
                   <div className="flex items-center gap-2">
                     <Switch
                       checked={isActive}
-                      onCheckedChange={() => togglePlaylistStatus(playlist.id)}
+                      onCheckedChange={() => togglePlaylistStatus(playlist.id, isActive)}
                       aria-label="Toggle status"
                     />
                     <Button
@@ -184,7 +207,7 @@ export function AudioManager() {
               
               <CollapsibleContent>
                 <CardContent className="p-3 pt-0 space-y-2">
-                  {playlist.tracks.map((track) => (
+                  {playlist.tracks?.map((track) => (
                     <div
                       key={track.id}
                       className="flex items-center justify-between p-2 bg-muted rounded-lg"
@@ -264,9 +287,20 @@ export function AudioManager() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Batal</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteConfirm} className="bg-destructive text-destructive-foreground">
-              Hapus
+            <AlertDialogCancel disabled={isDeleting}>Batal</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleDeleteConfirm} 
+              className="bg-destructive text-destructive-foreground"
+              disabled={isDeleting}
+            >
+              {isDeleting ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Menghapus...
+                </>
+              ) : (
+                'Hapus'
+              )}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

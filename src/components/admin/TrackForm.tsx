@@ -4,14 +4,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { AudioTrack } from '@/data/playlists';
+import { Track } from '@/context/DataContext';
 import { useStorageUpload } from '@/hooks/useStorageUpload';
 import { Upload, Music, X, Loader2 } from 'lucide-react';
 
 interface TrackFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  track?: AudioTrack | null;
+  track?: Track | null;
   onSubmit: (data: { title: string; src: string; oldSrc?: string }) => void;
 }
 

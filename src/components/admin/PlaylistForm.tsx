@@ -5,13 +5,13 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Playlist } from '@/data/playlists';
+import { Playlist } from '@/context/DataContext';
 
 interface PlaylistFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   playlist?: Playlist | null;
-  onSubmit: (data: { title: string; description: string; isActive: boolean }) => void;
+  onSubmit: (data: { title: string; description: string; is_active: boolean }) => void;
 }
 
 export function PlaylistForm({ open, onOpenChange, playlist, onSubmit }: PlaylistFormProps) {
@@ -22,8 +22,8 @@ export function PlaylistForm({ open, onOpenChange, playlist, onSubmit }: Playlis
   useEffect(() => {
     if (playlist) {
       setTitle(playlist.title);
-      setDescription(playlist.description);
-      setIsActive(playlist.isActive ?? true);
+      setDescription(playlist.description || '');
+      setIsActive(playlist.is_active);
     } else {
       setTitle('');
       setDescription('');
@@ -34,7 +34,7 @@ export function PlaylistForm({ open, onOpenChange, playlist, onSubmit }: Playlis
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (title.trim()) {
-      onSubmit({ title: title.trim(), description: description.trim(), isActive });
+      onSubmit({ title: title.trim(), description: description.trim(), is_active: isActive });
       onOpenChange(false);
     }
   };

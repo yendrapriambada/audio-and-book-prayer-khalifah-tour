@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { Play, Pause } from "lucide-react";
+import { Play, Pause, Loader2 } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { useData } from "@/context/DataContext";
 import { useAudio } from "@/context/AudioContext";
@@ -7,9 +7,17 @@ import { Button } from "@/components/ui/button";
 
 export default function AudioList() {
   const { playlistId } = useParams<{ playlistId: string }>();
-  const { getPlaylist } = useData();
+  const { getPlaylist, isLoadingPlaylists } = useData();
   const playlist = getPlaylist(playlistId || "");
   const { currentTrack, isPlaying, play, pause, resume, playPlaylist, playlist: currentPlaylist } = useAudio();
+
+  if (isLoadingPlaylists) {
+    return (
+      <div className="page-container flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   if (!playlist) {
     return (
@@ -19,6 +27,8 @@ export default function AudioList() {
       </div>
     );
   }
+
+  const tracks = playlist.tracks || [];
 
   const handlePlayPause = (track: { id: string; title: string; src: string }) => {
     const audioTrack = {
@@ -48,12 +58,14 @@ export default function AudioList() {
     } else if (isThisPlaylistPlaying && !isPlaying) {
       resume();
     } else {
-      const tracks = playlist.tracks.map(track => ({
-        ...track,
+      const audioTracks = tracks.map(track => ({
+        id: track.id,
+        title: track.title,
+        src: track.src,
         playlistId: playlist.id,
         playlistTitle: playlist.title,
       }));
-      playPlaylist(tracks, 0);
+      playPlaylist(audioTracks, 0);
     }
   };
 
@@ -69,28 +81,30 @@ export default function AudioList() {
         <p className="page-subtitle mt-1">{playlist.description}</p>
         
         {/* Play All Button */}
-        <Button
-          variant={isThisPlaylistActive && isPlaying ? "secondary" : "default"}
-          size="lg"
-          onClick={handlePlayAll}
-          className="w-full mt-4"
-        >
-          {isThisPlaylistActive && isPlaying ? (
-            <>
-              <Pause className="w-5 h-5" fill="currentColor" />
-              Jeda Semua
-            </>
-          ) : (
-            <>
-              <Play className="w-5 h-5 ml-0.5" fill="currentColor" />
-              Putar Semua
-            </>
-          )}
-        </Button>
+        {tracks.length > 0 && (
+          <Button
+            variant={isThisPlaylistActive && isPlaying ? "secondary" : "default"}
+            size="lg"
+            onClick={handlePlayAll}
+            className="w-full mt-4"
+          >
+            {isThisPlaylistActive && isPlaying ? (
+              <>
+                <Pause className="w-5 h-5" fill="currentColor" />
+                Jeda Semua
+              </>
+            ) : (
+              <>
+                <Play className="w-5 h-5 ml-0.5" fill="currentColor" />
+                Putar Semua
+              </>
+            )}
+          </Button>
+        )}
       </header>
 
       <div className="flex flex-col gap-3">
-        {playlist.tracks.map((track, index) => {
+        {tracks.map((track, index) => {
           const isCurrentTrack = currentTrack?.id === track.id;
           const isThisPlaying = isCurrentTrack && isPlaying;
 
@@ -132,6 +146,12 @@ export default function AudioList() {
             </div>
           );
         })}
+
+        {tracks.length === 0 && (
+          <div className="text-center py-8 text-muted-foreground">
+            <p>Belum ada audio dalam playlist ini</p>
+          </div>
+        )}
       </div>
     </div>
   );
