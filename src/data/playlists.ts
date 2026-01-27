@@ -9,6 +9,7 @@ export interface Playlist {
   title: string;
   description: string;
   tracks: AudioTrack[];
+  isActive: boolean;
 }
 
 // Sample audio URLs (using royalty-free Islamic audio samples)
@@ -20,6 +21,7 @@ export const playlists: Playlist[] = [
     id: "doa-manasik",
     title: "Doa Manasik",
     description: "Kumpulan doa untuk persiapan manasik",
+    isActive: true,
     tracks: [
       { id: "dm1", title: "Doa Keluar Rumah", src: "/audio/01_Doa_Keluar_Rumah.mp3" },
     ],
@@ -28,6 +30,7 @@ export const playlists: Playlist[] = [
     id: "manasik-haji",
     title: "Doa Manasik Haji",
     description: "Kumpulan doa untuk ibadah Haji",
+    isActive: true,
     tracks: [
       { id: "h1", title: "Niat Ihram Haji", src: SAMPLE_AUDIO },
       { id: "h2", title: "Doa Talbiyah", src: SAMPLE_AUDIO },
@@ -42,6 +45,7 @@ export const playlists: Playlist[] = [
     id: "manasik-umrah",
     title: "Doa Manasik Umrah",
     description: "Kumpulan doa untuk ibadah Umrah",
+    isActive: true,
     tracks: [
       { id: "u1", title: "Niat Ihram Umrah", src: SAMPLE_AUDIO },
       { id: "u2", title: "Doa Talbiyah Umrah", src: SAMPLE_AUDIO },
@@ -54,6 +58,7 @@ export const playlists: Playlist[] = [
     id: "doa-harian",
     title: "Doa Sehari-hari",
     description: "Doa-doa untuk aktivitas sehari-hari",
+    isActive: true,
     tracks: [
       { id: "d1", title: "Doa Bangun Tidur", src: SAMPLE_AUDIO },
       { id: "d2", title: "Doa Sebelum Makan", src: SAMPLE_AUDIO },
@@ -67,6 +72,7 @@ export const playlists: Playlist[] = [
     id: "doa-perjalanan",
     title: "Doa Perjalanan",
     description: "Doa saat bepergian",
+    isActive: true,
     tracks: [
       { id: "p1", title: "Doa Naik Kendaraan", src: SAMPLE_AUDIO },
       { id: "p2", title: "Doa Keselamatan Perjalanan", src: SAMPLE_AUDIO },
@@ -78,6 +84,7 @@ export const playlists: Playlist[] = [
     id: "doa-tanah-suci",
     title: "Doa di Tanah Suci",
     description: "Doa khusus di tempat-tempat suci",
+    isActive: true,
     tracks: [
       { id: "t1", title: "Doa Melihat Ka'bah", src: SAMPLE_AUDIO },
       { id: "t2", title: "Doa di Multazam", src: SAMPLE_AUDIO },

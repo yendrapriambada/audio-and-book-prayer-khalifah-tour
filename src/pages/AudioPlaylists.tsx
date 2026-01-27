@@ -4,6 +4,7 @@ import { useData } from "@/context/DataContext";
 
 export default function AudioPlaylists() {
   const { playlists } = useData();
+  const activePlaylists = playlists.filter(p => p.isActive ?? true);
 
   return (
     <div className="page-container">
@@ -17,7 +18,7 @@ export default function AudioPlaylists() {
       </header>
 
       <div className="flex flex-col gap-3">
-        {playlists.map((playlist) => (
+        {activePlaylists.map((playlist) => (
           <ListCard
             key={playlist.id}
             title={playlist.title}
