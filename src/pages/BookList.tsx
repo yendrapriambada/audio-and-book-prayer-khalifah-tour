@@ -7,14 +7,14 @@ export default function BookList() {
     <div className="page-container">
       <BackButton to="/" />
       
-      <header className="mb-8 mt-4">
+      <header className="mb-4 mt-2">
         <h1 className="page-title">Pilih Buku</h1>
-        <p className="page-subtitle mt-2">
+        <p className="page-subtitle mt-1">
           Pilih buku panduan yang ingin dibaca
         </p>
       </header>
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-3">
         {books.map((book) => (
           <ListCard
             key={book.id}

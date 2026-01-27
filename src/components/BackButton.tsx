@@ -1,30 +1,17 @@
 import { ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface BackButtonProps {
-  label?: string;
-  to?: string;
+  to: string;
 }
 
-export function BackButton({ label = "Kembali", to }: BackButtonProps) {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    if (to) {
-      navigate(to);
-    } else {
-      navigate(-1);
-    }
-  };
-
+export function BackButton({ to }: BackButtonProps) {
   return (
-    <button
-      onClick={handleClick}
-      className="back-button"
-      aria-label={label}
-    >
-      <ChevronLeft className="w-6 h-6" strokeWidth={2.5} />
-      <span>{label}</span>
-    </button>
+    <Link to={to} className="back-button">
+      <ArrowLeft className="w-5 h-5" />
+      <span>Kembali</span>
+    </Link>
   );
 }

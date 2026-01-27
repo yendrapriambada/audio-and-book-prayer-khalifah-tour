@@ -86,7 +86,7 @@
   }
 
   html {
-    font-size: 18px;
+    font-size: 16px;
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -99,35 +99,35 @@
 
 @layer components {
   .btn-primary-large {
-    @apply bg-primary text-primary-foreground font-semibold rounded-xl px-8 py-5 text-xl min-h-[56px] w-full transition-all duration-200 active:scale-[0.98] shadow-lg;
+    @apply bg-primary text-primary-foreground font-medium rounded-lg px-6 py-3 text-base min-h-[44px] w-full transition-all duration-200 active:scale-[0.98] shadow-md;
   }
 
   .btn-secondary-large {
-    @apply bg-secondary text-secondary-foreground font-semibold rounded-xl px-8 py-5 text-xl min-h-[56px] w-full transition-all duration-200 active:scale-[0.98] shadow-lg;
+    @apply bg-secondary text-secondary-foreground font-medium rounded-lg px-6 py-3 text-base min-h-[44px] w-full transition-all duration-200 active:scale-[0.98] shadow-md;
   }
 
   .card-interactive {
-    @apply bg-card rounded-2xl p-6 shadow-md border border-border transition-all duration-200 active:scale-[0.98];
+    @apply bg-card rounded-xl p-4 shadow-sm border border-border transition-all duration-200 active:scale-[0.98];
   }
 
   .page-container {
-    @apply min-h-screen bg-background px-4 py-6 pb-32;
+    @apply min-h-screen bg-background px-4 py-4 pb-24;
   }
 
   .page-title {
-    @apply text-2xl font-bold text-foreground leading-tight;
+    @apply text-xl font-bold text-foreground leading-tight;
   }
 
   .page-subtitle {
-    @apply text-lg text-muted-foreground leading-relaxed;
+    @apply text-sm text-muted-foreground leading-relaxed;
   }
 
   .back-button {
-    @apply inline-flex items-center gap-2 text-primary font-semibold text-lg py-3 px-4 -ml-4 rounded-xl transition-colors active:bg-primary/10;
+    @apply inline-flex items-center gap-1.5 text-primary font-medium text-base py-2 px-3 -ml-3 rounded-lg transition-colors active:bg-primary/10;
   }
 
   .list-item-card {
-    @apply bg-card rounded-2xl p-5 shadow-sm border border-border;
+    @apply bg-card rounded-xl p-4 shadow-sm border border-border;
   }
 }
 
