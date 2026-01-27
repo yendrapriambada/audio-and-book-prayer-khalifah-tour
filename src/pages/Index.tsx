@@ -1,19 +1,22 @@
 import { Headphones, BookOpen } from "lucide-react";
 import { ActionCard } from "@/components/ActionCard";
+import khalifahLogo from "@/assets/khalifah-logo.png";
 
 const Index = () => {
   return (
     <div className="page-container flex flex-col">
       {/* Header */}
-      <header className="text-center mb-6 pt-2">
-        <div className="inline-block bg-primary/10 text-primary font-medium px-3 py-1.5 rounded-full text-xs mb-3">
-          Khalifah Tour
-        </div>
-        <h1 className="text-xl font-bold text-foreground leading-tight mb-2">
-          Bacaan Doa & Audio Pendamping Ibadah
+      <header className="text-center mb-6 pt-4">
+        <img 
+          src={khalifahLogo} 
+          alt="Khalifah Tour" 
+          className="h-16 mx-auto mb-4"
+        />
+        <h1 className="text-xl font-bold text-primary leading-tight mb-2">
+          Ahlan Wa Sahlan! 👋
         </h1>
         <p className="text-sm text-muted-foreground">
-          Disediakan oleh Khalifah Tour untuk jamaah Haji & Umrah
+          Bacaan Doa & Audio Pendamping Ibadah — <em>Lebih Mudah, Lebih Bermakna</em>, untuk Jamaah Tercinta.
         </p>
       </header>
 
