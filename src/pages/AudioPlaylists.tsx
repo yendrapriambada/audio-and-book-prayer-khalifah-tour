@@ -4,7 +4,7 @@ import { useData } from "@/context/DataContext";
 
 export default function AudioPlaylists() {
   const { playlists } = useData();
-  const activePlaylists = playlists.filter(p => p.isActive ?? true);
+  const activePlaylists = playlists.filter(p => p.is_active);
 
   return (
     <div className="page-container">
@@ -22,7 +22,7 @@ export default function AudioPlaylists() {
           <ListCard
             key={playlist.id}
             title={playlist.title}
-            description={playlist.description}
+            description={playlist.description || ''}
             to={`/audio/${playlist.id}`}
             buttonText="Buka Playlist"
           />

@@ -30,7 +30,7 @@ export default function BookViewer() {
 
       {/* Fullscreen PDF Embed */}
       <iframe
-        src={`${book.pdfUrl}#toolbar=0&navpanes=0&scrollbar=0`}
+        src={`${book.pdf_url}#toolbar=0&navpanes=0&scrollbar=0`}
         className="flex-1 w-full border-0"
         title={book.title}
       />

@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
-import { Book } from '@/data/books';
+import { Book } from '@/context/DataContext';
 import { useStorageUpload } from '@/hooks/useStorageUpload';
 import { Upload, FileText, X, Loader2 } from 'lucide-react';
 
@@ -13,7 +13,7 @@ interface BookFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   book?: Book | null;
-  onSubmit: (data: { title: string; description: string; pdfUrl: string; pageCount?: number; oldPdfUrl?: string }) => void;
+  onSubmit: (data: { title: string; description: string; pdf_url: string; oldPdfUrl?: string }) => void;
 }
 
 const MAX_BOOK_SIZE = 150 * 1024 * 1024; // 150MB
@@ -22,7 +22,6 @@ export function BookForm({ open, onOpenChange, book, onSubmit }: BookFormProps) 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [pdfUrl, setPdfUrl] = useState('');
-  const [pageCount, setPageCount] = useState<string>('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -32,14 +31,12 @@ export function BookForm({ open, onOpenChange, book, onSubmit }: BookFormProps) 
   useEffect(() => {
     if (book) {
       setTitle(book.title);
-      setDescription(book.description);
-      setPdfUrl(book.pdfUrl);
-      setPageCount(book.pageCount?.toString() || '');
+      setDescription(book.description || '');
+      setPdfUrl(book.pdf_url);
     } else {
       setTitle('');
       setDescription('');
       setPdfUrl('');
-      setPageCount('');
     }
     setSelectedFile(null);
     setValidationError(null);
@@ -88,7 +85,7 @@ export function BookForm({ open, onOpenChange, book, onSubmit }: BookFormProps) 
     }
 
     let bookUrl = pdfUrl.trim();
-    const oldPdfUrl = book?.pdfUrl;
+    const oldPdfUrl = book?.pdf_url;
 
     // If a file is selected, upload it first
     if (selectedFile) {
@@ -109,8 +106,7 @@ export function BookForm({ open, onOpenChange, book, onSubmit }: BookFormProps) 
     onSubmit({
       title: title.trim(),
       description: description.trim(),
-      pdfUrl: bookUrl,
-      pageCount: pageCount ? parseInt(pageCount, 10) : undefined,
+      pdf_url: bookUrl,
       oldPdfUrl: fileChanged ? oldPdfUrl : undefined,
     });
     onOpenChange(false);
@@ -212,18 +208,6 @@ export function BookForm({ open, onOpenChange, book, onSubmit }: BookFormProps) 
               onChange={(e) => setPdfUrl(e.target.value)}
               placeholder="https://example.com/book.pdf"
               disabled={!!selectedFile}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="pageCount">Jumlah Halaman (opsional)</Label>
-            <Input
-              id="pageCount"
-              type="number"
-              value={pageCount}
-              onChange={(e) => setPageCount(e.target.value)}
-              placeholder="0"
-              min="0"
             />
           </div>
 
