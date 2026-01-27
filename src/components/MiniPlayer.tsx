@@ -1,23 +1,55 @@
-import { Pause, Play, X } from "lucide-react";
+import { Pause, Play, SkipBack, SkipForward, X } from "lucide-react";
 import { useAudio } from "@/context/AudioContext";
 import { Link } from "react-router-dom";
+import { Progress } from "@/components/ui/progress";
 
 export function MiniPlayer() {
-  const { currentTrack, isPlaying, pause, resume, stop } = useAudio();
+  const { 
+    currentTrack, 
+    isPlaying, 
+    currentTime,
+    duration,
+    playlist,
+    currentIndex,
+    pause, 
+    resume, 
+    stop,
+    next,
+    previous
+  } = useAudio();
 
   if (!currentTrack) return null;
 
+  const hasNext = currentIndex < playlist.length - 1;
+  const hasPrevious = currentIndex > 0;
+  const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-primary text-primary-foreground p-3 shadow-xl z-50">
-      <div className="flex items-center gap-3">
+    <div className="fixed bottom-0 left-0 right-0 bg-primary text-primary-foreground shadow-xl z-50">
+      {/* Progress bar */}
+      <Progress value={progress} className="h-1 rounded-none bg-primary-foreground/20" />
+      
+      <div className="flex items-center gap-2 p-3">
         <Link to="/audio/player" className="flex-1 min-w-0">
           <p className="font-medium text-sm truncate">{currentTrack.title}</p>
-          <p className="text-xs opacity-80">
-            {isPlaying ? "Sedang Diputar" : "Dijeda"}
+          <p className="text-xs opacity-80 truncate">
+            {currentTrack.playlistTitle}
+            {playlist.length > 1 && ` • ${currentIndex + 1}/${playlist.length}`}
           </p>
         </Link>
         
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1">
+          {/* Previous */}
+          <button
+            onClick={previous}
+            disabled={!hasPrevious}
+            className="w-9 h-9 rounded-full flex items-center justify-center transition-all active:scale-95 disabled:opacity-30"
+            aria-label="Sebelumnya"
+          >
+            <SkipBack className="w-4 h-4" fill="currentColor" />
+          </button>
+          
+          {/* Play/Pause */}
           <button
             onClick={isPlaying ? pause : resume}
             className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center transition-all active:scale-95"
@@ -30,9 +62,20 @@ export function MiniPlayer() {
             )}
           </button>
           
+          {/* Next */}
+          <button
+            onClick={next}
+            disabled={!hasNext}
+            className="w-9 h-9 rounded-full flex items-center justify-center transition-all active:scale-95 disabled:opacity-30"
+            aria-label="Selanjutnya"
+          >
+            <SkipForward className="w-4 h-4" fill="currentColor" />
+          </button>
+          
+          {/* Close */}
           <button
             onClick={stop}
-            className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center transition-all active:scale-95"
+            className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center transition-all active:scale-95 ml-1"
             aria-label="Tutup"
           >
             <X className="w-4 h-4" />
