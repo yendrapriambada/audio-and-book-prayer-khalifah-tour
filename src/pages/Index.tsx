@@ -30,8 +30,9 @@ const Index = () => {
 
       {/* Footer */}
       <footer className="text-center mt-6 pb-2">
+        <p className="text-muted-foreground text-xs">Khalifah Tour</p>
         <p className="text-muted-foreground text-xs">
-          <em>Khalifah Tour <br>Teman perjalanan ibadah Anda</em>
+          <em>Teman perjalanan ibadah Anda</em>
         </p>
       </footer>
     </div>
