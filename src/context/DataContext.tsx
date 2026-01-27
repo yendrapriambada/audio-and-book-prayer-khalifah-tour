@@ -9,6 +9,7 @@ interface DataContextType {
   addPlaylist: (playlist: Omit<Playlist, 'id'>) => void;
   updatePlaylist: (id: string, playlist: Partial<Playlist>) => void;
   deletePlaylist: (id: string) => void;
+  togglePlaylistStatus: (id: string) => void;
   getPlaylist: (id: string) => Playlist | undefined;
   
   // Tracks
@@ -36,7 +37,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   // Playlist operations
   const addPlaylist = (playlist: Omit<Playlist, 'id'>) => {
     const id = `playlist-${Date.now()}`;
-    setPlaylists((prev) => [...prev, { ...playlist, id }]);
+    setPlaylists((prev) => [...prev, { ...playlist, id, isActive: playlist.isActive ?? true }]);
   };
 
   const updatePlaylist = (id: string, updates: Partial<Playlist>) => {
@@ -47,6 +48,12 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
 
   const deletePlaylist = (id: string) => {
     setPlaylists((prev) => prev.filter((p) => p.id !== id));
+  };
+
+  const togglePlaylistStatus = (id: string) => {
+    setPlaylists((prev) =>
+      prev.map((p) => (p.id === id ? { ...p, isActive: !(p.isActive ?? true) } : p))
+    );
   };
 
   const getPlaylist = (id: string) => {
@@ -123,6 +130,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
         addPlaylist,
         updatePlaylist,
         deletePlaylist,
+        togglePlaylistStatus,
         getPlaylist,
         addTrack,
         updateTrack,

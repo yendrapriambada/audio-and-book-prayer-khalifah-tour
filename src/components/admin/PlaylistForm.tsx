@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Switch } from '@/components/ui/switch';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Playlist } from '@/data/playlists';
 
@@ -10,27 +11,30 @@ interface PlaylistFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   playlist?: Playlist | null;
-  onSubmit: (data: { title: string; description: string }) => void;
+  onSubmit: (data: { title: string; description: string; isActive: boolean }) => void;
 }
 
 export function PlaylistForm({ open, onOpenChange, playlist, onSubmit }: PlaylistFormProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [isActive, setIsActive] = useState(true);
 
   useEffect(() => {
     if (playlist) {
       setTitle(playlist.title);
       setDescription(playlist.description);
+      setIsActive(playlist.isActive ?? true);
     } else {
       setTitle('');
       setDescription('');
+      setIsActive(true);
     }
   }, [playlist, open]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (title.trim()) {
-      onSubmit({ title: title.trim(), description: description.trim() });
+      onSubmit({ title: title.trim(), description: description.trim(), isActive });
       onOpenChange(false);
     }
   };
@@ -60,6 +64,19 @@ export function PlaylistForm({ open, onOpenChange, playlist, onSubmit }: Playlis
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Masukkan deskripsi playlist"
               rows={3}
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <div className="space-y-0.5">
+              <Label htmlFor="isActive">Status Aktif</Label>
+              <p className="text-xs text-muted-foreground">
+                Playlist aktif akan muncul di halaman user
+              </p>
+            </div>
+            <Switch
+              id="isActive"
+              checked={isActive}
+              onCheckedChange={setIsActive}
             />
           </div>
           <DialogFooter>

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Switch } from '@/components/ui/switch';
 import { Plus, Edit, Trash2, Music, ChevronDown, ChevronRight } from 'lucide-react';
 import { useData } from '@/context/DataContext';
 import { PlaylistForm } from './PlaylistForm';
@@ -23,7 +25,7 @@ import {
 } from '@/components/ui/collapsible';
 
 export function AudioManager() {
-  const { playlists, addPlaylist, updatePlaylist, deletePlaylist, addTrack, updateTrack, deleteTrack } = useData();
+  const { playlists, addPlaylist, updatePlaylist, deletePlaylist, togglePlaylistStatus, addTrack, updateTrack, deleteTrack } = useData();
   
   const [playlistFormOpen, setPlaylistFormOpen] = useState(false);
   const [trackFormOpen, setTrackFormOpen] = useState(false);
@@ -55,11 +57,11 @@ export function AudioManager() {
     setPlaylistFormOpen(true);
   };
 
-  const handlePlaylistSubmit = (data: { title: string; description: string }) => {
+  const handlePlaylistSubmit = (data: { title: string; description: string; isActive: boolean }) => {
     if (editingPlaylist) {
       updatePlaylist(editingPlaylist.id, data);
     } else {
-      addPlaylist({ ...data, tracks: [] });
+      addPlaylist({ ...data, tracks: [], isActive: data.isActive });
     }
   };
 
@@ -105,8 +107,10 @@ export function AudioManager() {
       </div>
 
       <div className="space-y-3">
-        {playlists.map((playlist) => (
-          <Card key={playlist.id} className="overflow-hidden">
+        {playlists.map((playlist) => {
+          const isActive = playlist.isActive ?? true;
+          return (
+            <Card key={playlist.id} className={`overflow-hidden ${!isActive ? 'opacity-60' : ''}`}>
             <Collapsible
               open={expandedPlaylists.has(playlist.id)}
               onOpenChange={() => toggleExpanded(playlist.id)}
@@ -120,15 +124,25 @@ export function AudioManager() {
                       ) : (
                         <ChevronRight className="h-4 w-4 text-muted-foreground" />
                       )}
-                      <div>
-                        <CardTitle className="text-base">{playlist.title}</CardTitle>
-                        <p className="text-xs text-muted-foreground">
-                          {playlist.tracks.length} audio
-                        </p>
+                      <div className="flex items-center gap-2">
+                        <div>
+                          <CardTitle className="text-base">{playlist.title}</CardTitle>
+                          <p className="text-xs text-muted-foreground">
+                            {playlist.tracks.length} audio
+                          </p>
+                        </div>
+                        <Badge variant={isActive ? "default" : "secondary"} className="text-xs">
+                          {isActive ? 'Aktif' : 'Nonaktif'}
+                        </Badge>
                       </div>
                     </button>
                   </CollapsibleTrigger>
-                  <div className="flex gap-1">
+                  <div className="flex items-center gap-2">
+                    <Switch
+                      checked={isActive}
+                      onCheckedChange={() => togglePlaylistStatus(playlist.id)}
+                      aria-label="Toggle status"
+                    />
                     <Button
                       variant="ghost"
                       size="icon"
@@ -194,8 +208,9 @@ export function AudioManager() {
                 </CardContent>
               </CollapsibleContent>
             </Collapsible>
-          </Card>
-        ))}
+            </Card>
+          );
+        })}
 
         {playlists.length === 0 && (
           <div className="text-center py-8 text-muted-foreground">
