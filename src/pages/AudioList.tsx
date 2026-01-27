@@ -41,12 +41,12 @@ export default function AudioList() {
     <div className="page-container">
       <BackButton to="/audio" />
       
-      <header className="mb-4 mt-2">
+      <header className="mb-8 mt-4">
         <h1 className="page-title">{playlist.title}</h1>
-        <p className="page-subtitle mt-1">{playlist.description}</p>
+        <p className="page-subtitle mt-2">{playlist.description}</p>
       </header>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-4">
         {playlist.tracks.map((track) => {
           const isCurrentTrack = currentTrack?.id === track.id;
           const isThisPlaying = isCurrentTrack && isPlaying;
@@ -54,16 +54,16 @@ export default function AudioList() {
           return (
             <div
               key={track.id}
-              className={`list-item-card flex items-center gap-3 ${
-                isCurrentTrack ? "ring-1 ring-primary bg-primary/5" : ""
+              className={`list-item-card flex items-center gap-4 ${
+                isCurrentTrack ? "ring-2 ring-primary" : ""
               }`}
             >
               <div className="flex-1 min-w-0">
-                <h3 className="text-sm font-medium text-foreground truncate">
+                <h3 className="text-xl font-semibold text-foreground truncate">
                   {track.title}
                 </h3>
                 {isCurrentTrack && (
-                  <p className="text-xs text-primary mt-0.5">
+                  <p className="text-primary font-medium mt-1">
                     {isThisPlaying ? "Sedang Diputar" : "Dijeda"}
                   </p>
                 )}
@@ -71,14 +71,14 @@ export default function AudioList() {
 
               <Button
                 variant={isThisPlaying ? "secondary" : "default"}
-                size="icon"
+                size="icon-lg"
                 onClick={() => handlePlayPause(track)}
                 aria-label={isThisPlaying ? "Jeda" : "Putar"}
               >
                 {isThisPlaying ? (
-                  <Pause className="w-4 h-4" fill="currentColor" />
+                  <Pause className="w-8 h-8" fill="currentColor" />
                 ) : (
-                  <Play className="w-4 h-4 ml-0.5" fill="currentColor" />
+                  <Play className="w-8 h-8 ml-1" fill="currentColor" />
                 )}
               </Button>
             </div>

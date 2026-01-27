@@ -3,25 +3,22 @@ import { ActionCard } from "@/components/ActionCard";
 
 const Index = () => {
   return (
-    <div className="page-container flex flex-col min-h-screen">
+    <div className="page-container flex flex-col">
       {/* Header */}
-      <header className="text-center mb-8 pt-6">
-        <div className="inline-flex items-center gap-2 bg-primary/10 text-primary font-medium px-3 py-1.5 rounded-full text-xs mb-4">
-          <div className="w-5 h-5 bg-primary rounded-md flex items-center justify-center">
-            <span className="text-primary-foreground text-[10px] font-bold">KT</span>
-          </div>
+      <header className="text-center mb-10 pt-4">
+        <div className="inline-block bg-primary/10 text-primary font-semibold px-4 py-2 rounded-full text-sm mb-4">
           Khalifah Tour
         </div>
-        <h1 className="text-xl font-bold text-foreground leading-snug mb-2">
-          Bacaan Doa & Audio<br />Pendamping Ibadah
+        <h1 className="text-hero font-bold text-foreground leading-tight mb-3">
+          Bacaan Doa & Audio Pendamping Ibadah
         </h1>
-        <p className="text-sm text-muted-foreground">
-          Untuk jamaah Haji & Umrah
+        <p className="page-subtitle">
+          Disediakan oleh Khalifah Tour untuk jamaah Haji & Umrah
         </p>
       </header>
 
-      {/* Main Actions - 2 Big Cards */}
-      <div className="flex-1 flex flex-col gap-4">
+      {/* Main Actions */}
+      <div className="flex-1 flex flex-col gap-6">
         <ActionCard
           title="Audio"
           description="Dengarkan doa dan bacaan"
@@ -40,8 +37,8 @@ const Index = () => {
       </div>
 
       {/* Footer */}
-      <footer className="text-center pt-6 pb-4">
-        <p className="text-xs text-muted-foreground">
+      <footer className="text-center mt-10 pb-4">
+        <p className="text-muted-foreground text-base">
           Semoga ibadah Anda diterima Allah SWT
         </p>
       </footer>

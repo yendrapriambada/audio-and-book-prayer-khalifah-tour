@@ -6,78 +6,77 @@
 
 @layer base {
   :root {
-    /* Clean modern palette with vibrant accents */
-    --background: 210 20% 98%;
-    --foreground: 220 25% 12%;
+    /* Islamic-inspired warm palette for elderly users */
+    --background: 40 33% 97%;
+    --foreground: 150 40% 12%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 220 25% 12%;
+    --card: 40 30% 95%;
+    --card-foreground: 150 40% 12%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 12%;
+    --popover: 40 30% 95%;
+    --popover-foreground: 150 40% 12%;
 
-    /* Vibrant teal/green primary */
-    --primary: 168 80% 38%;
-    --primary-foreground: 0 0% 100%;
+    /* Emerald green - primary Islamic color */
+    --primary: 160 84% 25%;
+    --primary-foreground: 40 33% 98%;
 
-    /* Warm coral/orange secondary */
-    --secondary: 24 95% 60%;
-    --secondary-foreground: 0 0% 100%;
+    /* Warm gold accent */
+    --secondary: 43 74% 49%;
+    --secondary-foreground: 40 33% 98%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 10% 46%;
+    --muted: 40 20% 90%;
+    --muted-foreground: 150 20% 35%;
 
-    --accent: 168 80% 38%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 43 74% 49%;
+    --accent-foreground: 150 40% 12%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive-foreground: 40 33% 98%;
 
-    --border: 220 13% 90%;
-    --input: 220 13% 90%;
-    --ring: 168 80% 38%;
+    --border: 150 20% 80%;
+    --input: 150 20% 80%;
+    --ring: 160 84% 25%;
 
-    --radius: 0.75rem;
+    --radius: 1rem;
 
-    --surface-warm: 220 14% 96%;
-    
-    /* Gradient colors */
-    --gradient-primary-from: 168 80% 38%;
-    --gradient-primary-to: 180 70% 45%;
-    --gradient-secondary-from: 24 95% 55%;
-    --gradient-secondary-to: 35 95% 60%;
+    /* Custom tokens for this app */
+    --surface-warm: 40 40% 92%;
+    --text-large: 1.25rem;
+    --text-title: 1.75rem;
+    --text-hero: 2.25rem;
+    --min-touch-target: 56px;
   }
 
   .dark {
-    --background: 220 20% 8%;
-    --foreground: 0 0% 98%;
+    --background: 150 30% 8%;
+    --foreground: 40 33% 95%;
 
-    --card: 220 20% 12%;
-    --card-foreground: 0 0% 98%;
+    --card: 150 25% 12%;
+    --card-foreground: 40 33% 95%;
 
-    --popover: 220 20% 12%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 150 25% 12%;
+    --popover-foreground: 40 33% 95%;
 
-    --primary: 168 70% 50%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 160 70% 40%;
+    --primary-foreground: 40 33% 98%;
 
-    --secondary: 24 90% 55%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 43 74% 49%;
+    --secondary-foreground: 40 33% 98%;
 
-    --muted: 220 14% 18%;
-    --muted-foreground: 220 10% 60%;
+    --muted: 150 20% 20%;
+    --muted-foreground: 40 20% 70%;
 
-    --accent: 168 70% 50%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 43 74% 49%;
+    --accent-foreground: 40 33% 98%;
 
     --destructive: 0 62% 50%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive-foreground: 40 33% 98%;
 
-    --border: 220 13% 20%;
-    --input: 220 13% 20%;
-    --ring: 168 70% 50%;
+    --border: 150 20% 25%;
+    --input: 150 20% 25%;
+    --ring: 160 70% 40%;
 
-    --surface-warm: 220 14% 15%;
+    --surface-warm: 150 20% 15%;
   }
 }
 
@@ -87,7 +86,7 @@
   }
 
   html {
-    font-size: 16px;
+    font-size: 18px;
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -100,35 +99,35 @@
 
 @layer components {
   .btn-primary-large {
-    @apply bg-primary text-primary-foreground font-medium rounded-lg px-4 py-3 text-sm min-h-[44px] w-full transition-all duration-150 active:scale-[0.98];
+    @apply bg-primary text-primary-foreground font-semibold rounded-xl px-8 py-5 text-xl min-h-[56px] w-full transition-all duration-200 active:scale-[0.98] shadow-lg;
   }
 
   .btn-secondary-large {
-    @apply bg-secondary text-secondary-foreground font-medium rounded-lg px-4 py-3 text-sm min-h-[44px] w-full transition-all duration-150 active:scale-[0.98];
+    @apply bg-secondary text-secondary-foreground font-semibold rounded-xl px-8 py-5 text-xl min-h-[56px] w-full transition-all duration-200 active:scale-[0.98] shadow-lg;
   }
 
   .card-interactive {
-    @apply bg-card rounded-xl p-4 shadow-sm border border-border transition-all duration-150 active:scale-[0.99];
+    @apply bg-card rounded-2xl p-6 shadow-md border border-border transition-all duration-200 active:scale-[0.98];
   }
 
   .page-container {
-    @apply min-h-screen bg-background px-4 py-4 pb-24;
+    @apply min-h-screen bg-background px-4 py-6 pb-32;
   }
 
   .page-title {
-    @apply text-lg font-semibold text-foreground leading-tight;
+    @apply text-2xl font-bold text-foreground leading-tight;
   }
 
   .page-subtitle {
-    @apply text-sm text-muted-foreground leading-relaxed;
+    @apply text-lg text-muted-foreground leading-relaxed;
   }
 
   .back-button {
-    @apply inline-flex items-center gap-1 text-foreground font-medium text-sm py-2 px-2 -ml-2 rounded-lg transition-colors active:bg-muted;
+    @apply inline-flex items-center gap-2 text-primary font-semibold text-lg py-3 px-4 -ml-4 rounded-xl transition-colors active:bg-primary/10;
   }
 
   .list-item-card {
-    @apply bg-card rounded-xl p-4 shadow-sm border border-border;
+    @apply bg-card rounded-2xl p-5 shadow-sm border border-border;
   }
 }
 

@@ -7,21 +7,21 @@ export default function AudioPlaylists() {
     <div className="page-container">
       <BackButton to="/" />
       
-      <header className="mb-4 mt-2">
-        <h1 className="page-title">Playlist Audio</h1>
-        <p className="page-subtitle mt-1">
-          Pilih kategori doa
+      <header className="mb-8 mt-4">
+        <h1 className="page-title">Pilih Playlist Audio</h1>
+        <p className="page-subtitle mt-2">
+          Pilih kategori doa yang ingin didengarkan
         </p>
       </header>
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-4">
         {playlists.map((playlist) => (
           <ListCard
             key={playlist.id}
             title={playlist.title}
             description={playlist.description}
             to={`/audio/${playlist.id}`}
-            buttonText="Buka"
+            buttonText="Buka Playlist"
           />
         ))}
       </div>
