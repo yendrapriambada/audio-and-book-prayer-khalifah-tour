@@ -17,6 +17,14 @@ const SAMPLE_AUDIO = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.
 
 export const playlists: Playlist[] = [
   {
+    id: "doa-manasik",
+    title: "Doa Manasik",
+    description: "Kumpulan doa untuk persiapan manasik",
+    tracks: [
+      { id: "dm1", title: "Doa Keluar Rumah", src: "/audio/01_Doa_Keluar_Rumah.mp3" },
+    ],
+  },
+  {
     id: "manasik-haji",
     title: "Doa Manasik Haji",
     description: "Kumpulan doa untuk ibadah Haji",
