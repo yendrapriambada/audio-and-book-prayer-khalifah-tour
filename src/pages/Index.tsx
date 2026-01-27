@@ -10,7 +10,7 @@ const Index = () => {
         <img src={khalifahLogo} alt="Khalifah Tour" className="h-16 mx-auto mb-4" />
         <h1 className="text-xl font-bold text-primary leading-tight mb-2">Ahlan Wa Sahlan! 👋</h1>
         <p className="text-sm text-muted-foreground">
-          Bacaan Doa & Audio Pendamping Ibadah —{" "}
+          Audio & Prayer Book for Pilgrims —{" "}
           <em>Panduan ibadah yang mudah, jelas, dan bermakna untuk jamaah tercinta.</em>
         </p>
       </header>
