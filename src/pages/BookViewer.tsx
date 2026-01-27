@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { Download, ZoomIn, ZoomOut } from "lucide-react";
+import { Download, ExternalLink, FileText } from "lucide-react";
 import { useState } from "react";
 import { BackButton } from "@/components/BackButton";
 import { useData } from "@/context/DataContext";
@@ -9,7 +9,7 @@ export default function BookViewer() {
   const { bookId } = useParams<{ bookId: string }>();
   const { getBook } = useData();
   const book = getBook(bookId || "");
-  const [zoom, setZoom] = useState(100);
+  const [loadError, setLoadError] = useState(false);
 
   if (!book) {
     return (
@@ -20,16 +20,13 @@ export default function BookViewer() {
     );
   }
 
-  const handleZoomIn = () => {
-    setZoom((prev) => Math.min(prev + 25, 200));
-  };
-
-  const handleZoomOut = () => {
-    setZoom((prev) => Math.max(prev - 25, 50));
-  };
-
   const handleDownload = () => {
-    window.open(book.pdfUrl, "_blank");
+    // Open in new tab - most reliable way to view PDFs
+    window.open(book.pdfUrl, "_blank", "noopener,noreferrer");
+  };
+
+  const handleOpenInNewTab = () => {
+    window.open(book.pdfUrl, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -44,19 +41,43 @@ export default function BookViewer() {
 
       {/* PDF Viewer */}
       <div className="flex-1 overflow-auto p-4">
-        <div 
-          className="bg-card rounded-xl shadow-md overflow-hidden"
-          style={{ transform: `scale(${zoom / 100})`, transformOrigin: "top left" }}
-        >
-          <iframe
-            src={`${book.pdfUrl}#toolbar=0`}
-            className="w-full min-h-[600px]"
-            title={book.title}
-            style={{ 
-              width: zoom !== 100 ? `${10000 / zoom}%` : "100%",
-            }}
-          />
-        </div>
+        {loadError ? (
+          // Fallback UI when PDF fails to load
+          <div className="flex flex-col items-center justify-center min-h-[400px] bg-card rounded-xl p-8 text-center">
+            <FileText className="w-16 h-16 text-muted-foreground mb-4" />
+            <h2 className="text-lg font-semibold mb-2">PDF tidak dapat ditampilkan</h2>
+            <p className="text-muted-foreground mb-6 max-w-sm">
+              Browser Anda mungkin memblokir tampilan PDF. Silakan buka di tab baru atau download file.
+            </p>
+            <div className="flex gap-3">
+              <Button onClick={handleOpenInNewTab} variant="outline">
+                <ExternalLink className="w-4 h-4 mr-2" />
+                Buka di Tab Baru
+              </Button>
+              <Button onClick={handleDownload}>
+                <Download className="w-4 h-4 mr-2" />
+                Download
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div className="bg-card rounded-xl shadow-md overflow-hidden">
+            <object
+              data={book.pdfUrl}
+              type="application/pdf"
+              className="w-full min-h-[600px]"
+              onError={() => setLoadError(true)}
+            >
+              {/* Fallback for browsers that don't support object/embed */}
+              <embed
+                src={book.pdfUrl}
+                type="application/pdf"
+                className="w-full min-h-[600px]"
+                onError={() => setLoadError(true)}
+              />
+            </object>
+          </div>
+        )}
       </div>
 
       {/* Bottom Controls */}
@@ -64,36 +85,24 @@ export default function BookViewer() {
         <div className="flex gap-2">
           <Button
             variant="outline"
-            size="sm"
-            onClick={handleZoomOut}
-            disabled={zoom <= 50}
+            size="default"
+            onClick={handleOpenInNewTab}
             className="flex-1"
           >
-            <ZoomOut className="w-4 h-4" />
-            Kecilkan
+            <ExternalLink className="w-4 h-4 mr-2" />
+            Buka di Tab Baru
           </Button>
           
           <Button
-            variant="outline"
-            size="sm"
-            onClick={handleZoomIn}
-            disabled={zoom >= 200}
+            variant="default"
+            size="default"
+            onClick={handleDownload}
             className="flex-1"
           >
-            <ZoomIn className="w-4 h-4" />
-            Besarkan
+            <Download className="w-4 h-4 mr-2" />
+            Download PDF
           </Button>
         </div>
-        
-        <Button
-          variant="default"
-          size="default"
-          onClick={handleDownload}
-          className="w-full mt-2"
-        >
-          <Download className="w-4 h-4" />
-          Download PDF
-        </Button>
       </div>
     </div>
   );
