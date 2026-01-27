@@ -7,16 +7,11 @@ const Index = () => {
     <div className="page-container flex flex-col">
       {/* Header */}
       <header className="text-center mb-6 pt-4">
-        <img 
-          src={khalifahLogo} 
-          alt="Khalifah Tour" 
-          className="h-16 mx-auto mb-4"
-        />
-        <h1 className="text-xl font-bold text-primary leading-tight mb-2">
-          Ahlan Wa Sahlan! 👋
-        </h1>
+        <img src={khalifahLogo} alt="Khalifah Tour" className="h-16 mx-auto mb-4" />
+        <h1 className="text-xl font-bold text-primary leading-tight mb-2">Ahlan Wa Sahlan! 👋</h1>
         <p className="text-sm text-muted-foreground">
-          Bacaan Doa & Audio Pendamping Ibadah — <em>Lebih Mudah, Lebih Bermakna</em>, untuk Jamaah Tercinta.
+          Bacaan Doa & Audio Pendamping Ibadah — <em>Panduan ibadah yang mudah, jelas, dan bermakna</em> untuk Jamaah
+          Tercinta.
         </p>
       </header>
 
@@ -29,21 +24,13 @@ const Index = () => {
           to="/audio"
           variant="primary"
         />
-        
-        <ActionCard
-          title="Buku"
-          description="Baca panduan ibadah"
-          icon={BookOpen}
-          to="/books"
-          variant="secondary"
-        />
+
+        <ActionCard title="Buku" description="Baca panduan ibadah" icon={BookOpen} to="/books" variant="secondary" />
       </div>
 
       {/* Footer */}
       <footer className="text-center mt-6 pb-2">
-        <p className="text-muted-foreground text-xs">
-          Semoga ibadah Anda diterima Allah SWT
-        </p>
+        <p className="text-muted-foreground text-xs">Semoga ibadah Anda diterima Allah SWT</p>
       </footer>
     </div>
   );
