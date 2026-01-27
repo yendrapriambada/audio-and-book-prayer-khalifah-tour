@@ -34,9 +34,9 @@ export default function BookViewer() {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
-      <div className="sticky top-0 bg-background z-10 px-4 py-3 border-b border-border">
+      <div className="sticky top-0 bg-background z-10 px-4 py-2 border-b border-border">
         <BackButton to="/books" />
-        <h1 className="text-xl font-bold text-foreground mt-2 truncate">
+        <h1 className="text-base font-semibold text-foreground mt-1 truncate">
           {book.title}
         </h1>
       </div>
@@ -59,38 +59,38 @@ export default function BookViewer() {
       </div>
 
       {/* Bottom Controls */}
-      <div className="sticky bottom-0 bg-background border-t border-border p-4 pb-safe-bottom">
-        <div className="flex gap-3">
+      <div className="sticky bottom-0 bg-background border-t border-border p-3 pb-safe-bottom">
+        <div className="flex gap-2">
           <Button
             variant="outline"
-            size="default"
+            size="sm"
             onClick={handleZoomOut}
             disabled={zoom <= 50}
             className="flex-1"
           >
-            <ZoomOut className="w-5 h-5" />
+            <ZoomOut className="w-4 h-4" />
             Kecilkan
           </Button>
           
           <Button
             variant="outline"
-            size="default"
+            size="sm"
             onClick={handleZoomIn}
             disabled={zoom >= 200}
             className="flex-1"
           >
-            <ZoomIn className="w-5 h-5" />
+            <ZoomIn className="w-4 h-4" />
             Besarkan
           </Button>
         </div>
         
         <Button
           variant="default"
-          size="lg"
+          size="default"
           onClick={handleDownload}
-          className="w-full mt-3"
+          className="w-full mt-2"
         >
-          <Download className="w-5 h-5" />
+          <Download className="w-4 h-4" />
           Download PDF
         </Button>
       </div>

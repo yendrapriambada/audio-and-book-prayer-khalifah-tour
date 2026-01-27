@@ -17,9 +17,9 @@ export default {
         sans: ['Noto Sans', 'system-ui', 'sans-serif'],
       },
       fontSize: {
-        'body': '1.125rem',
-        'title': '1.5rem',
-        'hero': '2rem',
+        'body': '1rem',
+        'title': '1.25rem',
+        'hero': '1.5rem',
       },
       colors: {
         border: "hsl(var(--border))",
@@ -67,7 +67,7 @@ export default {
         '3xl': '2rem',
       },
       minHeight: {
-        'touch': '56px',
+        'touch': '44px',
       },
       spacing: {
         'safe-bottom': 'env(safe-area-inset-bottom, 1rem)',
