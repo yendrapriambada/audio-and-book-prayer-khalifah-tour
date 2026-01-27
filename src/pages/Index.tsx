@@ -1,7 +1,5 @@
-import { Headphones, BookOpen, Settings } from "lucide-react";
+import { Headphones, BookOpen } from "lucide-react";
 import { ActionCard } from "@/components/ActionCard";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
 import khalifahLogo from "@/assets/khalifah-logo.png";
 
 const Index = () => {
@@ -32,12 +30,6 @@ const Index = () => {
 
       {/* Footer */}
       <footer className="text-center mt-6 pb-2">
-        <Button variant="ghost" size="sm" asChild className="mb-2">
-          <Link to="/admin">
-            <Settings className="h-4 w-4 mr-1" />
-            Admin
-          </Link>
-        </Button>
         <p className="text-muted-foreground text-xs">Khalifah Tour</p>
         <p className="text-muted-foreground text-xs">
           <em>Teman perjalanan ibadah Anda</em>

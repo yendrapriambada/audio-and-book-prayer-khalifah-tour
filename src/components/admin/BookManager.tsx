@@ -5,6 +5,7 @@ import { Plus, Edit, Trash2, BookOpen } from 'lucide-react';
 import { useData } from '@/context/DataContext';
 import { BookForm } from './BookForm';
 import { Book } from '@/data/books';
+import { deleteStorageFile } from '@/lib/storageUtils';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -33,16 +34,26 @@ export function BookManager() {
     setFormOpen(true);
   };
 
-  const handleSubmit = (data: { title: string; description: string; pdfUrl: string; pageCount?: number }) => {
+  const handleSubmit = async (data: { title: string; description: string; pdfUrl: string; pageCount?: number; oldPdfUrl?: string }) => {
+    // Delete old file from storage if replaced
+    if (data.oldPdfUrl) {
+      await deleteStorageFile('books', data.oldPdfUrl);
+    }
+    
     if (editingBook) {
-      updateBook(editingBook.id, data);
+      updateBook(editingBook.id, { title: data.title, description: data.description, pdfUrl: data.pdfUrl, pageCount: data.pageCount });
     } else {
-      addBook(data);
+      addBook({ title: data.title, description: data.description, pdfUrl: data.pdfUrl, pageCount: data.pageCount });
     }
   };
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     if (deleteConfirm) {
+      // Delete PDF file from storage
+      const book = books.find(b => b.id === deleteConfirm);
+      if (book) {
+        await deleteStorageFile('books', book.pdfUrl);
+      }
       deleteBook(deleteConfirm);
       setDeleteConfirm(null);
     }
