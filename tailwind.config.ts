@@ -14,7 +14,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ['Noto Sans', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'Helvetica Neue', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         'body': '1rem',
