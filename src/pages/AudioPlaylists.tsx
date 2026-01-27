@@ -1,8 +1,10 @@
 import { BackButton } from "@/components/BackButton";
 import { ListCard } from "@/components/ListCard";
-import { playlists } from "@/data/playlists";
+import { useData } from "@/context/DataContext";
 
 export default function AudioPlaylists() {
+  const { playlists } = useData();
+
   return (
     <div className="page-container">
       <BackButton to="/" />

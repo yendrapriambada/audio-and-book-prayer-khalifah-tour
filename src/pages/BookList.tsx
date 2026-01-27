@@ -1,8 +1,10 @@
 import { BackButton } from "@/components/BackButton";
 import { ListCard } from "@/components/ListCard";
-import { books } from "@/data/books";
+import { useData } from "@/context/DataContext";
 
 export default function BookList() {
+  const { books } = useData();
+
   return (
     <div className="page-container">
       <BackButton to="/" />
