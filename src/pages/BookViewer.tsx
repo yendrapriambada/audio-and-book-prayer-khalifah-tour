@@ -49,12 +49,13 @@ export default function BookViewer() {
           style={{ transform: `scale(${zoom / 100})`, transformOrigin: "top left" }}
         >
           <iframe
-            src={`${book.pdfUrl}#toolbar=0`}
+            src={`https://docs.google.com/viewer?url=${encodeURIComponent(book.pdfUrl)}&embedded=true`}
             className="w-full min-h-[600px]"
             title={book.title}
             style={{ 
               width: zoom !== 100 ? `${10000 / zoom}%` : "100%",
             }}
+            allow="autoplay"
           />
         </div>
       </div>
