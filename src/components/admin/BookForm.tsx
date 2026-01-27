@@ -13,7 +13,7 @@ interface BookFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   book?: Book | null;
-  onSubmit: (data: { title: string; description: string; pdfUrl: string; pageCount?: number }) => void;
+  onSubmit: (data: { title: string; description: string; pdfUrl: string; pageCount?: number; oldPdfUrl?: string }) => void;
 }
 
 const MAX_BOOK_SIZE = 150 * 1024 * 1024; // 150MB
@@ -88,6 +88,7 @@ export function BookForm({ open, onOpenChange, book, onSubmit }: BookFormProps) 
     }
 
     let bookUrl = pdfUrl.trim();
+    const oldPdfUrl = book?.pdfUrl;
 
     // If a file is selected, upload it first
     if (selectedFile) {
@@ -103,11 +104,14 @@ export function BookForm({ open, onOpenChange, book, onSubmit }: BookFormProps) 
       return;
     }
 
+    // Pass oldPdfUrl if file changed so parent can delete old file
+    const fileChanged = selectedFile && oldPdfUrl && oldPdfUrl !== bookUrl;
     onSubmit({
       title: title.trim(),
       description: description.trim(),
       pdfUrl: bookUrl,
       pageCount: pageCount ? parseInt(pageCount, 10) : undefined,
+      oldPdfUrl: fileChanged ? oldPdfUrl : undefined,
     });
     onOpenChange(false);
   };

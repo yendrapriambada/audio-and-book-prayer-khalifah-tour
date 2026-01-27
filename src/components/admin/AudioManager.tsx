@@ -8,6 +8,7 @@ import { useData } from '@/context/DataContext';
 import { PlaylistForm } from './PlaylistForm';
 import { TrackForm } from './TrackForm';
 import { Playlist, AudioTrack } from '@/data/playlists';
+import { deleteStorageFile } from '@/lib/storageUtils';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -77,20 +78,38 @@ export function AudioManager() {
     setTrackFormOpen(true);
   };
 
-  const handleTrackSubmit = (data: { title: string; src: string }) => {
+  const handleTrackSubmit = async (data: { title: string; src: string; oldSrc?: string }) => {
+    // Delete old file from storage if replaced
+    if (data.oldSrc) {
+      await deleteStorageFile('audio', data.oldSrc);
+    }
+    
     if (editingTrack) {
-      updateTrack(editingTrack.playlistId, editingTrack.track.id, data);
+      updateTrack(editingTrack.playlistId, editingTrack.track.id, { title: data.title, src: data.src });
     } else if (selectedPlaylistId) {
-      addTrack(selectedPlaylistId, data);
+      addTrack(selectedPlaylistId, { title: data.title, src: data.src });
     }
   };
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     if (!deleteConfirm) return;
     
     if (deleteConfirm.type === 'playlist') {
+      // Delete all audio files in the playlist from storage
+      const playlist = playlists.find(p => p.id === deleteConfirm.id);
+      if (playlist) {
+        for (const track of playlist.tracks) {
+          await deleteStorageFile('audio', track.src);
+        }
+      }
       deletePlaylist(deleteConfirm.id);
     } else if (deleteConfirm.playlistId) {
+      // Delete single track's audio file from storage
+      const playlist = playlists.find(p => p.id === deleteConfirm.playlistId);
+      const track = playlist?.tracks.find(t => t.id === deleteConfirm.id);
+      if (track) {
+        await deleteStorageFile('audio', track.src);
+      }
       deleteTrack(deleteConfirm.playlistId, deleteConfirm.id);
     }
     setDeleteConfirm(null);

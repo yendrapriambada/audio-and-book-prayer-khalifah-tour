@@ -12,7 +12,7 @@ interface TrackFormProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   track?: AudioTrack | null;
-  onSubmit: (data: { title: string; src: string }) => void;
+  onSubmit: (data: { title: string; src: string; oldSrc?: string }) => void;
 }
 
 const MAX_AUDIO_SIZE = 50 * 1024 * 1024; // 50MB
@@ -82,6 +82,7 @@ export function TrackForm({ open, onOpenChange, track, onSubmit }: TrackFormProp
     }
 
     let audioUrl = src.trim();
+    const oldSrc = track?.src;
 
     // If a file is selected, upload it first
     if (selectedFile) {
@@ -97,7 +98,13 @@ export function TrackForm({ open, onOpenChange, track, onSubmit }: TrackFormProp
       return;
     }
 
-    onSubmit({ title: title.trim(), src: audioUrl });
+    // Pass oldSrc if file changed so parent can delete old file
+    const fileChanged = selectedFile && oldSrc && oldSrc !== audioUrl;
+    onSubmit({ 
+      title: title.trim(), 
+      src: audioUrl,
+      oldSrc: fileChanged ? oldSrc : undefined
+    });
     onOpenChange(false);
   };
 
