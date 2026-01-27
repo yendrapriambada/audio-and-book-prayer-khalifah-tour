@@ -2,11 +2,12 @@ import { useParams } from "react-router-dom";
 import { Download, ZoomIn, ZoomOut } from "lucide-react";
 import { useState } from "react";
 import { BackButton } from "@/components/BackButton";
-import { getBook } from "@/data/books";
+import { useData } from "@/context/DataContext";
 import { Button } from "@/components/ui/button";
 
 export default function BookViewer() {
   const { bookId } = useParams<{ bookId: string }>();
+  const { getBook } = useData();
   const book = getBook(bookId || "");
   const [zoom, setZoom] = useState(100);
 

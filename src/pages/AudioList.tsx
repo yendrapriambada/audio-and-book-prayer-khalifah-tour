@@ -1,12 +1,13 @@
 import { useParams } from "react-router-dom";
 import { Play, Pause } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
-import { getPlaylist } from "@/data/playlists";
+import { useData } from "@/context/DataContext";
 import { useAudio } from "@/context/AudioContext";
 import { Button } from "@/components/ui/button";
 
 export default function AudioList() {
   const { playlistId } = useParams<{ playlistId: string }>();
+  const { getPlaylist } = useData();
   const playlist = getPlaylist(playlistId || "");
   const { currentTrack, isPlaying, play, pause, resume, playPlaylist, playlist: currentPlaylist } = useAudio();
 
