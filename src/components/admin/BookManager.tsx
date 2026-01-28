@@ -87,12 +87,12 @@ export function BookManager() {
           <Card key={book.id}>
             <CardContent className="p-3">
               <div className="flex items-start justify-between gap-3">
-                <div className="flex items-start gap-3 flex-1">
+                <div className="flex items-start gap-3 flex-1 min-w-0 overflow-hidden">
                   <div className="w-10 h-12 bg-primary/10 rounded flex items-center justify-center flex-shrink-0">
                     <BookOpen className="h-5 w-5 text-primary" />
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-medium text-foreground truncate">{book.title}</h3>
+                  <div className="flex-1 min-w-0 overflow-hidden">
+                    <h3 className="font-medium text-foreground truncate" title={book.title}>{book.title}</h3>
                     <p className="text-xs text-muted-foreground line-clamp-1">{book.description}</p>
                   </div>
                 </div>

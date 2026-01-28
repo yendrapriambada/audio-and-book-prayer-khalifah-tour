@@ -154,10 +154,10 @@ export function BookForm({ open, onOpenChange, book, onSubmit }: BookFormProps) 
             />
             
             {selectedFile ? (
-              <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
+              <div className="flex items-center gap-2 p-3 bg-muted rounded-lg overflow-hidden">
                 <FileText className="h-5 w-5 text-primary flex-shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium truncate">{selectedFile.name}</p>
+                <div className="flex-1 min-w-0 overflow-hidden">
+                  <p className="text-sm font-medium truncate" title={selectedFile.name}>{selectedFile.name}</p>
                   <p className="text-xs text-muted-foreground">
                     {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB
                   </p>
@@ -166,7 +166,7 @@ export function BookForm({ open, onOpenChange, book, onSubmit }: BookFormProps) 
                   type="button"
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8"
+                  className="h-8 w-8 flex-shrink-0"
                   onClick={handleRemoveFile}
                   disabled={isUploading}
                 >
