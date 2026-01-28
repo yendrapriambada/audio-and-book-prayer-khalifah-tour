@@ -11,6 +11,7 @@ interface AudioTrack {
 interface AudioContextType {
   currentTrack: AudioTrack | null;
   isPlaying: boolean;
+  isLoading: boolean;
   currentTime: number;
   duration: number;
   playlist: AudioTrack[];
@@ -30,6 +31,7 @@ const AudioContext = createContext<AudioContextType | null>(null);
 export function AudioProvider({ children }: { children: React.ReactNode }) {
   const [currentTrack, setCurrentTrack] = useState<AudioTrack | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [playlist, setPlaylist] = useState<AudioTrack[]>([]);
@@ -52,6 +54,14 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       audioRef.current.pause();
     }
 
+    setIsLoading(true);
+    setCurrentTrack(track);
+    
+    if (newPlaylist) {
+      setPlaylist(newPlaylist);
+      setCurrentIndex(index ?? 0);
+    }
+
     const audio = new Audio(track.src);
     audioRef.current = audio;
     
@@ -59,15 +69,23 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       setDuration(audio.duration);
     });
 
+    audio.addEventListener('canplaythrough', () => {
+      setIsLoading(false);
+    });
+
+    audio.addEventListener('waiting', () => {
+      setIsLoading(true);
+    });
+
+    audio.addEventListener('playing', () => {
+      setIsLoading(false);
+    });
+
     audio.play().then(() => {
-      setCurrentTrack(track);
       setIsPlaying(true);
-      if (newPlaylist) {
-        setPlaylist(newPlaylist);
-        setCurrentIndex(index ?? 0);
-      }
     }).catch((error) => {
       console.error("Error playing audio:", error);
+      setIsLoading(false);
     });
 
     audio.onended = () => {
@@ -119,6 +137,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
     }
     setCurrentTrack(null);
     setIsPlaying(false);
+    setIsLoading(false);
     setCurrentTime(0);
     setDuration(0);
     setPlaylist([]);
@@ -157,7 +176,8 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   return (
     <AudioContext.Provider value={{ 
       currentTrack, 
-      isPlaying, 
+      isPlaying,
+      isLoading,
       currentTime,
       duration,
       playlist,

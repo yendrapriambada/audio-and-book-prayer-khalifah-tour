@@ -1,4 +1,4 @@
-import { Play, Pause, SkipBack, SkipForward } from "lucide-react";
+import { Play, Pause, SkipBack, SkipForward, Loader2 } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { useAudio } from "@/context/AudioContext";
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,8 @@ function formatTime(seconds: number): string {
 export default function AudioPlayer() {
   const { 
     currentTrack, 
-    isPlaying, 
+    isPlaying,
+    isLoading,
     currentTime,
     duration,
     playlist,
@@ -53,7 +54,9 @@ export default function AudioPlayer() {
         {/* Album Art Placeholder */}
         <div className="w-64 h-64 bg-primary/10 rounded-3xl flex items-center justify-center mb-8 shadow-lg">
           <div className="w-24 h-24 bg-primary rounded-full flex items-center justify-center">
-            {isPlaying ? (
+            {isLoading ? (
+              <Loader2 className="w-12 h-12 text-primary-foreground animate-spin" />
+            ) : isPlaying ? (
               <div className="flex gap-1.5">
                 <div className="w-2 h-10 bg-primary-foreground rounded-full animate-pulse" style={{ animationDelay: '0ms' }} />
                 <div className="w-2 h-8 bg-primary-foreground rounded-full animate-pulse" style={{ animationDelay: '150ms' }} />
@@ -72,7 +75,7 @@ export default function AudioPlayer() {
             {currentTrack.title}
           </h1>
           <p className="text-lg text-muted-foreground">
-            {currentTrack.playlistTitle}
+            {isLoading ? "Memuat audio..." : currentTrack.playlistTitle}
           </p>
           {playlist.length > 1 && (
             <p className="text-sm text-muted-foreground mt-1">
@@ -89,6 +92,7 @@ export default function AudioPlayer() {
             step={1}
             onValueChange={(value) => seek(value[0])}
             className="w-full"
+            disabled={isLoading}
           />
           <div className="flex justify-between text-sm text-muted-foreground mt-2">
             <span>{formatTime(currentTime)}</span>
@@ -103,7 +107,7 @@ export default function AudioPlayer() {
             variant="ghost"
             size="icon-lg"
             onClick={previous}
-            disabled={!hasPrevious}
+            disabled={!hasPrevious || isLoading}
             aria-label="Sebelumnya"
             className="text-foreground disabled:opacity-30"
           >
@@ -115,10 +119,13 @@ export default function AudioPlayer() {
             variant="default"
             size="icon-lg"
             onClick={isPlaying ? pause : resume}
+            disabled={isLoading}
             className="w-16 h-16 rounded-full"
-            aria-label={isPlaying ? "Jeda" : "Putar"}
+            aria-label={isLoading ? "Memuat" : isPlaying ? "Jeda" : "Putar"}
           >
-            {isPlaying ? (
+            {isLoading ? (
+              <Loader2 className="w-8 h-8 animate-spin" />
+            ) : isPlaying ? (
               <Pause className="w-8 h-8" fill="currentColor" />
             ) : (
               <Play className="w-8 h-8 ml-1" fill="currentColor" />
@@ -130,7 +137,7 @@ export default function AudioPlayer() {
             variant="ghost"
             size="icon-lg"
             onClick={next}
-            disabled={!hasNext}
+            disabled={!hasNext || isLoading}
             aria-label="Selanjutnya"
             className="text-foreground disabled:opacity-30"
           >

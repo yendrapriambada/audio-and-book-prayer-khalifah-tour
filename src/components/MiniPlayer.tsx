@@ -1,4 +1,4 @@
-import { Pause, Play, SkipBack, SkipForward, X } from "lucide-react";
+import { Pause, Play, SkipBack, SkipForward, X, Loader2 } from "lucide-react";
 import { useAudio } from "@/context/AudioContext";
 import { Link } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
@@ -6,7 +6,8 @@ import { Progress } from "@/components/ui/progress";
 export function MiniPlayer() {
   const { 
     currentTrack, 
-    isPlaying, 
+    isPlaying,
+    isLoading,
     currentTime,
     duration,
     playlist,
@@ -33,8 +34,8 @@ export function MiniPlayer() {
         <Link to="/audio/player" className="flex-1 min-w-0">
           <p className="font-medium text-sm truncate">{currentTrack.title}</p>
           <p className="text-xs opacity-80 truncate">
-            {currentTrack.playlistTitle}
-            {playlist.length > 1 && ` • ${currentIndex + 1}/${playlist.length}`}
+            {isLoading ? "Memuat..." : currentTrack.playlistTitle}
+            {!isLoading && playlist.length > 1 && ` • ${currentIndex + 1}/${playlist.length}`}
           </p>
         </Link>
         
@@ -42,20 +43,23 @@ export function MiniPlayer() {
           {/* Previous */}
           <button
             onClick={previous}
-            disabled={!hasPrevious}
+            disabled={!hasPrevious || isLoading}
             className="w-9 h-9 rounded-full flex items-center justify-center transition-all active:scale-95 disabled:opacity-30"
             aria-label="Sebelumnya"
           >
             <SkipBack className="w-4 h-4" fill="currentColor" />
           </button>
           
-          {/* Play/Pause */}
+          {/* Play/Pause/Loading */}
           <button
             onClick={isPlaying ? pause : resume}
-            className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center transition-all active:scale-95"
-            aria-label={isPlaying ? "Jeda" : "Putar"}
+            disabled={isLoading}
+            className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center transition-all active:scale-95 disabled:opacity-70"
+            aria-label={isLoading ? "Memuat" : isPlaying ? "Jeda" : "Putar"}
           >
-            {isPlaying ? (
+            {isLoading ? (
+              <Loader2 className="w-5 h-5 animate-spin" />
+            ) : isPlaying ? (
               <Pause className="w-5 h-5" fill="currentColor" />
             ) : (
               <Play className="w-5 h-5 ml-0.5" fill="currentColor" />
@@ -65,7 +69,7 @@ export function MiniPlayer() {
           {/* Next */}
           <button
             onClick={next}
-            disabled={!hasNext}
+            disabled={!hasNext || isLoading}
             className="w-9 h-9 rounded-full flex items-center justify-center transition-all active:scale-95 disabled:opacity-30"
             aria-label="Selanjutnya"
           >
