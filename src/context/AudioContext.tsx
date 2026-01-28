@@ -152,16 +152,19 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   }, [playlist, currentIndex, playTrack]);
 
   const previous = useCallback(() => {
-    // If more than 3 seconds in, restart current track
-    if (audioRef.current && audioRef.current.currentTime > 3) {
-      audioRef.current.currentTime = 0;
-      return;
-    }
-    
+    // If we have a previous track and we're at the beginning (< 3 seconds), go to previous
+    // Otherwise restart current track
     if (playlist.length > 0 && currentIndex > 0) {
-      const prevIndex = currentIndex - 1;
-      playTrack(playlist[prevIndex], playlist, prevIndex);
+      if (audioRef.current && audioRef.current.currentTime > 3) {
+        // More than 3 seconds in: restart current track
+        audioRef.current.currentTime = 0;
+      } else {
+        // Less than 3 seconds: go to previous track
+        const prevIndex = currentIndex - 1;
+        playTrack(playlist[prevIndex], playlist, prevIndex);
+      }
     } else if (audioRef.current) {
+      // No previous track available: restart current track
       audioRef.current.currentTime = 0;
     }
   }, [playlist, currentIndex, playTrack]);

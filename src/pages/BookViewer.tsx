@@ -9,6 +9,7 @@ export default function BookViewer() {
   const navigate = useNavigate();
   const book = getBook(bookId || "");
   const [isLoading, setIsLoading] = useState(true);
+  const [isDownloading, setIsDownloading] = useState(false);
   const [useGoogleViewer, setUseGoogleViewer] = useState(false);
 
   // Detect iOS Safari for alternative viewer
@@ -21,8 +22,9 @@ export default function BookViewer() {
   }, []);
 
   const handleDownload = async () => {
-    if (!book) return;
+    if (!book || isDownloading) return;
     
+    setIsDownloading(true);
     try {
       const response = await fetch(book.pdf_url);
       const blob = await response.blob();
@@ -37,6 +39,8 @@ export default function BookViewer() {
     } catch (error) {
       // Fallback: open in new tab
       window.open(book.pdf_url, '_blank');
+    } finally {
+      setIsDownloading(false);
     }
   };
 
@@ -79,10 +83,15 @@ export default function BookViewer() {
       {/* Floating Download Button */}
       <button
         onClick={handleDownload}
-        className="absolute top-4 right-4 z-10 bg-background/80 backdrop-blur-sm rounded-full p-2 shadow-md border border-border"
-        aria-label="Download"
+        disabled={isDownloading}
+        className="absolute top-4 right-4 z-10 bg-background/80 backdrop-blur-sm rounded-full p-2 shadow-md border border-border disabled:opacity-70"
+        aria-label={isDownloading ? "Mengunduh..." : "Download"}
       >
-        <Download className="w-5 h-5 text-foreground" />
+        {isDownloading ? (
+          <Loader2 className="w-5 h-5 text-foreground animate-spin" />
+        ) : (
+          <Download className="w-5 h-5 text-foreground" />
+        )}
       </button>
 
       {/* Loading Overlay */}

@@ -9,7 +9,16 @@ export default function AudioList() {
   const { playlistId } = useParams<{ playlistId: string }>();
   const { getPlaylist, isLoadingPlaylists } = useData();
   const playlist = getPlaylist(playlistId || "");
-  const { currentTrack, isPlaying, isLoading, play, pause, resume, playPlaylist, playlist: currentPlaylist } = useAudio();
+  const { currentTrack, isPlaying, isLoading, pause, resume, playPlaylist, playlist: currentPlaylist } = useAudio();
+
+  // Prepare all tracks as AudioTracks for the full playlist context
+  const allAudioTracks = (playlist?.tracks || []).map(track => ({
+    id: track.id,
+    title: track.title,
+    src: track.src,
+    playlistId: playlist?.id || "",
+    playlistTitle: playlist?.title || "",
+  }));
 
   if (isLoadingPlaylists) {
     return (
@@ -30,13 +39,7 @@ export default function AudioList() {
 
   const tracks = playlist.tracks || [];
 
-  const handlePlayPause = (track: { id: string; title: string; src: string }) => {
-    const audioTrack = {
-      ...track,
-      playlistId: playlist.id,
-      playlistTitle: playlist.title,
-    };
-
+  const handlePlayPause = (track: { id: string; title: string; src: string }, trackIndex: number) => {
     if (currentTrack?.id === track.id) {
       if (isPlaying) {
         pause();
@@ -44,7 +47,8 @@ export default function AudioList() {
         resume();
       }
     } else {
-      play(audioTrack);
+      // Always play with full playlist context so next/prev works
+      playPlaylist(allAudioTracks, trackIndex);
     }
   };
 
@@ -58,14 +62,7 @@ export default function AudioList() {
     } else if (isThisPlaylistPlaying && !isPlaying) {
       resume();
     } else {
-      const audioTracks = tracks.map(track => ({
-        id: track.id,
-        title: track.title,
-        src: track.src,
-        playlistId: playlist.id,
-        playlistTitle: playlist.title,
-      }));
-      playPlaylist(audioTracks, 0);
+      playPlaylist(allAudioTracks, 0);
     }
   };
 
@@ -135,7 +132,7 @@ export default function AudioList() {
               <Button
                 variant={isThisPlaying ? "secondary" : "default"}
                 size="icon"
-                onClick={() => handlePlayPause(track)}
+                onClick={() => handlePlayPause(track, index)}
                 disabled={isThisLoading}
                 aria-label={isThisPlaying ? "Jeda" : "Putar"}
               >
