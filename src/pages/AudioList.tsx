@@ -9,7 +9,7 @@ export default function AudioList() {
   const { playlistId } = useParams<{ playlistId: string }>();
   const { getPlaylist, isLoadingPlaylists } = useData();
   const playlist = getPlaylist(playlistId || "");
-  const { currentTrack, isPlaying, play, pause, resume, playPlaylist, playlist: currentPlaylist } = useAudio();
+  const { currentTrack, isPlaying, isLoading, play, pause, resume, playPlaylist, playlist: currentPlaylist } = useAudio();
 
   if (isLoadingPlaylists) {
     return (
@@ -107,6 +107,7 @@ export default function AudioList() {
         {tracks.map((track, index) => {
           const isCurrentTrack = currentTrack?.id === track.id;
           const isThisPlaying = isCurrentTrack && isPlaying;
+          const isThisLoading = isCurrentTrack && isLoading;
 
           return (
             <div
@@ -126,7 +127,7 @@ export default function AudioList() {
                 </h3>
                 {isCurrentTrack && (
                   <p className="text-primary text-sm font-medium mt-0.5">
-                    {isThisPlaying ? "Sedang Diputar" : "Dijeda"}
+                    {isThisLoading ? "Memuat..." : isThisPlaying ? "Sedang Diputar" : "Dijeda"}
                   </p>
                 )}
               </div>
@@ -135,9 +136,12 @@ export default function AudioList() {
                 variant={isThisPlaying ? "secondary" : "default"}
                 size="icon"
                 onClick={() => handlePlayPause(track)}
+                disabled={isThisLoading}
                 aria-label={isThisPlaying ? "Jeda" : "Putar"}
               >
-                {isThisPlaying ? (
+                {isThisLoading ? (
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                ) : isThisPlaying ? (
                   <Pause className="w-5 h-5" fill="currentColor" />
                 ) : (
                   <Play className="w-5 h-5 ml-0.5" fill="currentColor" />
