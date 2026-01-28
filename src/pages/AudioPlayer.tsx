@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Play, Pause, SkipBack, SkipForward, Loader2, Download } from "lucide-react";
+import { Play, Pause, SkipBack, SkipForward, Loader2, Download, BookOpen } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { useAudio } from "@/context/AudioContext";
 import { Button } from "@/components/ui/button";
@@ -95,112 +95,63 @@ export default function AudioPlayer() {
       </div>
 
       <div className="flex-1 flex flex-col items-center justify-center text-center px-4">
-        {/* Enhanced Album Art with Animated Rings */}
-        <div className="relative w-72 h-72 mb-10">
-          {/* Outer animated ring */}
-          <div 
-            className={cn(
-              "absolute inset-0 rounded-full border-4 border-primary/20 transition-all duration-500",
-              isPlaying && "animate-[spin_8s_linear_infinite]"
-            )}
-            style={{
-              background: `conic-gradient(from 0deg, hsl(var(--primary) / 0.1), hsl(var(--primary) / 0.3), hsl(var(--primary) / 0.1))`
-            }}
-          />
+        {/* Calm, Spiritual Album Art */}
+        <div className="relative w-56 h-56 mb-10">
+          {/* Soft outer glow */}
+          <div className="absolute inset-0 rounded-full bg-primary/10 blur-xl" />
           
           {/* Progress ring */}
           <svg className="absolute inset-0 w-full h-full -rotate-90">
             <circle
               cx="50%"
               cy="50%"
-              r="46%"
+              r="48%"
               fill="none"
               stroke="hsl(var(--muted))"
-              strokeWidth="4"
+              strokeWidth="3"
             />
             <circle
               cx="50%"
               cy="50%"
-              r="46%"
+              r="48%"
               fill="none"
               stroke="hsl(var(--primary))"
-              strokeWidth="4"
+              strokeWidth="3"
               strokeLinecap="round"
-              strokeDasharray={`${progress * 2.89} 289`}
+              strokeDasharray={`${progress * 3.02} 302`}
               className="transition-all duration-300"
             />
           </svg>
 
-          {/* Inner container */}
-          <div className="absolute inset-4 bg-gradient-to-br from-primary/20 via-primary/10 to-transparent rounded-full shadow-2xl flex items-center justify-center">
-            {/* Center circle with visualizer */}
-            <div className="w-32 h-32 bg-gradient-to-br from-primary to-primary/80 rounded-full flex items-center justify-center shadow-lg">
+          {/* Main circle container */}
+          <div className="absolute inset-3 bg-gradient-to-b from-primary/15 to-primary/5 rounded-full flex items-center justify-center shadow-sm">
+            {/* Center icon */}
+            <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center shadow-md">
               {isLoading ? (
-                <Loader2 className="w-14 h-14 text-primary-foreground animate-spin" />
-              ) : isPlaying ? (
-                <div className="flex items-end gap-1.5 h-16">
-                  <div 
-                    className="w-2.5 bg-primary-foreground rounded-full animate-bounce" 
-                    style={{ height: '60%', animationDelay: '0ms', animationDuration: '0.6s' }} 
-                  />
-                  <div 
-                    className="w-2.5 bg-primary-foreground rounded-full animate-bounce" 
-                    style={{ height: '100%', animationDelay: '150ms', animationDuration: '0.6s' }} 
-                  />
-                  <div 
-                    className="w-2.5 bg-primary-foreground rounded-full animate-bounce" 
-                    style={{ height: '40%', animationDelay: '300ms', animationDuration: '0.6s' }} 
-                  />
-                  <div 
-                    className="w-2.5 bg-primary-foreground rounded-full animate-bounce" 
-                    style={{ height: '80%', animationDelay: '450ms', animationDuration: '0.6s' }} 
-                  />
-                  <div 
-                    className="w-2.5 bg-primary-foreground rounded-full animate-bounce" 
-                    style={{ height: '50%', animationDelay: '600ms', animationDuration: '0.6s' }} 
-                  />
-                </div>
+                <Loader2 className="w-10 h-10 text-primary-foreground animate-spin" />
               ) : (
-                <Play className="w-14 h-14 text-primary-foreground ml-2" fill="currentColor" />
+                <BookOpen className="w-10 h-10 text-primary-foreground" />
               )}
             </div>
           </div>
-          
-          {/* Pulsing background effect when playing */}
-          {isPlaying && (
-            <>
-              <div className="absolute inset-0 rounded-full bg-primary/10 animate-ping" style={{ animationDuration: '2s' }} />
-              <div className="absolute inset-8 rounded-full bg-primary/5 animate-ping" style={{ animationDuration: '2.5s' }} />
-            </>
-          )}
         </div>
 
-        {/* Track Info with better styling */}
+        {/* Track Info */}
         <div className="mb-8 w-full max-w-sm">
-          <h1 className="text-2xl font-bold text-foreground mb-2 truncate px-4">
+          <h1 className="text-xl font-semibold text-foreground mb-2 line-clamp-2 px-4">
             {currentTrack.title}
           </h1>
-          <p className="text-base text-muted-foreground font-medium">
+          <p className="text-base text-muted-foreground">
             {isLoading ? "Memuat audio..." : currentTrack.playlistTitle}
           </p>
           {playlist.length > 1 && (
-            <div className="flex items-center justify-center gap-2 mt-3">
-              {playlist.map((_, idx) => (
-                <div 
-                  key={idx}
-                  className={cn(
-                    "w-2 h-2 rounded-full transition-all duration-300",
-                    idx === currentIndex 
-                      ? "w-6 bg-primary" 
-                      : "bg-muted-foreground/30"
-                  )}
-                />
-              ))}
-            </div>
+            <p className="text-sm text-muted-foreground mt-2">
+              {currentIndex + 1} dari {playlist.length}
+            </p>
           )}
         </div>
 
-        {/* Enhanced Progress Bar */}
+        {/* Progress Bar */}
         <div className="w-full max-w-sm mb-8">
           <Slider
             value={[currentTime]}
@@ -210,13 +161,13 @@ export default function AudioPlayer() {
             className="w-full"
             disabled={isLoading}
           />
-          <div className="flex justify-between text-sm font-medium mt-3">
-            <span className="text-foreground">{formatTime(currentTime)}</span>
+          <div className="flex justify-between text-sm mt-3">
+            <span className="text-foreground font-medium">{formatTime(currentTime)}</span>
             <span className="text-muted-foreground">-{formatTime(remainingTime)}</span>
           </div>
         </div>
 
-        {/* Enhanced Playback Controls */}
+        {/* Playback Controls */}
         <div className="flex items-center justify-center gap-6 w-full">
           {/* Previous Button */}
           <Button
@@ -225,27 +176,26 @@ export default function AudioPlayer() {
             onClick={previous}
             disabled={!hasPrevious || isLoading}
             aria-label="Sebelumnya"
-            className="h-14 w-14 rounded-full text-foreground disabled:opacity-30 hover:bg-muted transition-all duration-200 hover:scale-105"
+            className="h-12 w-12 rounded-full text-foreground disabled:opacity-30"
           >
-            <SkipBack className="w-7 h-7" fill="currentColor" />
+            <SkipBack className="w-6 h-6" fill="currentColor" />
           </Button>
 
-          {/* Play/Pause Button with enhanced styling */}
+          {/* Play/Pause Button */}
           <Button
             variant="default"
             size="icon"
             onClick={isPlaying ? pause : resume}
             disabled={isLoading}
-            className="w-18 h-18 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105"
-            style={{ width: '72px', height: '72px' }}
+            className="w-16 h-16 rounded-full shadow-md"
             aria-label={isLoading ? "Memuat" : isPlaying ? "Jeda" : "Putar"}
           >
             {isLoading ? (
-              <Loader2 className="w-9 h-9 animate-spin" />
+              <Loader2 className="w-8 h-8 animate-spin" />
             ) : isPlaying ? (
-              <Pause className="w-9 h-9" fill="currentColor" />
+              <Pause className="w-8 h-8" fill="currentColor" />
             ) : (
-              <Play className="w-9 h-9 ml-1" fill="currentColor" />
+              <Play className="w-8 h-8 ml-1" fill="currentColor" />
             )}
           </Button>
 
@@ -256,9 +206,9 @@ export default function AudioPlayer() {
             onClick={next}
             disabled={!hasNext || isLoading}
             aria-label="Selanjutnya"
-            className="h-14 w-14 rounded-full text-foreground disabled:opacity-30 hover:bg-muted transition-all duration-200 hover:scale-105"
+            className="h-12 w-12 rounded-full text-foreground disabled:opacity-30"
           >
-            <SkipForward className="w-7 h-7" fill="currentColor" />
+            <SkipForward className="w-6 h-6" fill="currentColor" />
           </Button>
         </div>
       </div>
