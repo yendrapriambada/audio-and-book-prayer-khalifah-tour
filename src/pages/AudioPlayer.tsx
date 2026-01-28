@@ -102,25 +102,27 @@ export default function AudioPlayer() {
           {/* Soft outer glow */}
           <div className="absolute inset-0 rounded-full bg-primary/10 blur-xl" />
           
-          {/* Progress ring */}
-          <svg className="absolute inset-0 w-full h-full -rotate-90">
+          {/* Progress ring - using fixed pixel values for accurate calculation */}
+          {/* Container is 224px (w-56), radius is 48% = ~107px, circumference = 2 * π * 107 ≈ 672 */}
+          <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 224 224">
             <circle
-              cx="50%"
-              cy="50%"
-              r="48%"
+              cx="112"
+              cy="112"
+              r="107"
               fill="none"
               stroke="hsl(var(--muted))"
               strokeWidth="3"
             />
             <circle
-              cx="50%"
-              cy="50%"
-              r="48%"
+              cx="112"
+              cy="112"
+              r="107"
               fill="none"
               stroke="hsl(var(--primary))"
               strokeWidth="3"
               strokeLinecap="round"
-              strokeDasharray={`${progress * 3.02} 302`}
+              strokeDasharray="672"
+              strokeDashoffset={672 - (progress / 100) * 672}
               className="transition-all duration-300"
             />
           </svg>
