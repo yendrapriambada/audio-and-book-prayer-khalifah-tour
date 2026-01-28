@@ -71,7 +71,9 @@ export default function AudioPlayer() {
   const hasNext = currentIndex < playlist.length - 1;
   const hasPrevious = currentIndex > 0 || currentTime > 3;
   const remainingTime = duration - currentTime;
-  const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+  // When audio is complete (or very close), show full circle
+  const isComplete = duration > 0 && currentTime >= duration - 0.5;
+  const progress = isComplete ? 100 : (duration > 0 ? (currentTime / duration) * 100 : 0);
 
   return (
     <div className="page-container flex flex-col min-h-screen pb-8">
