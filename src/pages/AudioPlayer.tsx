@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Play, Pause, SkipBack, SkipForward, Loader2, BookOpen } from "lucide-react";
+import { Play, Pause, SkipBack, SkipForward, Loader2, Download, BookOpen } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { useAudio } from "@/context/AudioContext";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,29 @@ export default function AudioPlayer() {
     seek
   } = useAudio();
 
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  const handleDownload = async () => {
+    if (!currentTrack?.src) return;
+    
+    setIsDownloading(true);
+    try {
+      const response = await fetch(currentTrack.src);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${currentTrack.title}.mp3`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Download failed:', error);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   if (!currentTrack) {
     return (
@@ -54,8 +77,24 @@ export default function AudioPlayer() {
 
   return (
     <div className="page-container flex flex-col min-h-screen pb-8">
-      {/* Header */}
-      <BackButton to={`/audio/${currentTrack.playlistId}`} />
+      {/* Header with back and download buttons */}
+      <div className="flex items-center justify-between">
+        <BackButton to={`/audio/${currentTrack.playlistId}`} />
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={handleDownload}
+          disabled={isDownloading}
+          className="h-10 w-10 rounded-full bg-muted hover:bg-muted/80"
+          aria-label="Download audio"
+        >
+          {isDownloading ? (
+            <Loader2 className="h-5 w-5 animate-spin" />
+          ) : (
+            <Download className="h-5 w-5" />
+          )}
+        </Button>
+      </div>
 
       <div className="flex-1 flex flex-col items-center justify-center text-center px-4">
         {/* Calm, Spiritual Album Art */}

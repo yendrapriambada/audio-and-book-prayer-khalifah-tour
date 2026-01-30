@@ -1,10 +1,9 @@
 import { Pause, Play, SkipBack, SkipForward, X, Loader2 } from "lucide-react";
 import { useAudio } from "@/context/AudioContext";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Progress } from "@/components/ui/progress";
 
 export function MiniPlayer() {
-  const location = useLocation();
   const { 
     currentTrack, 
     isPlaying,
@@ -20,9 +19,6 @@ export function MiniPlayer() {
     previous
   } = useAudio();
 
-  // Hide MiniPlayer when on the full AudioPlayer page
-  if (location.pathname === "/audio/player") return null;
-  
   if (!currentTrack) return null;
 
   const hasNext = currentIndex < playlist.length - 1;
