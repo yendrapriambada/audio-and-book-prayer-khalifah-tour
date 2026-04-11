@@ -51,28 +51,6 @@ export default function BookViewer() {
     }
   };
 
-  const handleDownload = async () => {
-    if (!book || isDownloading) return;
-    
-    setIsDownloading(true);
-    try {
-      const response = await fetch(book.pdf_url);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${book.title}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    } catch (error) {
-      // Fallback: open in new tab
-      window.open(book.pdf_url, '_blank');
-    } finally {
-      setIsDownloading(false);
-    }
-  };
 
   if (isLoadingBooks) {
     return (
@@ -110,19 +88,6 @@ export default function BookViewer() {
         <ArrowLeft className="w-5 h-5 text-foreground" />
       </button>
 
-      {/* Floating Download Button */}
-      <button
-        onClick={handleDownload}
-        disabled={isDownloading}
-        className="absolute top-4 right-4 z-10 bg-background/80 backdrop-blur-sm rounded-full p-2 shadow-md border border-border disabled:opacity-70"
-        aria-label={isDownloading ? "Mengunduh..." : "Download"}
-      >
-        {isDownloading ? (
-          <Loader2 className="w-5 h-5 text-foreground animate-spin" />
-        ) : (
-          <Download className="w-5 h-5 text-foreground" />
-        )}
-      </button>
 
       {/* Loading Overlay */}
       {isLoading && !viewerFailed && (
