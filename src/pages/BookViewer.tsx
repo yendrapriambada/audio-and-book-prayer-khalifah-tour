@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Download, Loader2, FileText, ExternalLink } from "lucide-react";
+import { ArrowLeft, Loader2, FileText, ExternalLink } from "lucide-react";
 import { useData } from "@/context/DataContext";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,6 @@ export default function BookViewer() {
   const navigate = useNavigate();
   const book = getBook(bookId || "");
   const [isLoading, setIsLoading] = useState(true);
-  const [isDownloading, setIsDownloading] = useState(false);
   const [useGoogleViewer, setUseGoogleViewer] = useState(false);
   const [viewerFailed, setViewerFailed] = useState(false);
   const [loadTimeout, setLoadTimeout] = useState<NodeJS.Timeout | null>(null);
@@ -52,28 +51,6 @@ export default function BookViewer() {
     }
   };
 
-  const handleDownload = async () => {
-    if (!book || isDownloading) return;
-    
-    setIsDownloading(true);
-    try {
-      const response = await fetch(book.pdf_url);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${book.title}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-    } catch (error) {
-      // Fallback: open in new tab
-      window.open(book.pdf_url, '_blank');
-    } finally {
-      setIsDownloading(false);
-    }
-  };
 
   if (isLoadingBooks) {
     return (
@@ -111,19 +88,6 @@ export default function BookViewer() {
         <ArrowLeft className="w-5 h-5 text-foreground" />
       </button>
 
-      {/* Floating Download Button */}
-      <button
-        onClick={handleDownload}
-        disabled={isDownloading}
-        className="absolute top-4 right-4 z-10 bg-background/80 backdrop-blur-sm rounded-full p-2 shadow-md border border-border disabled:opacity-70"
-        aria-label={isDownloading ? "Mengunduh..." : "Download"}
-      >
-        {isDownloading ? (
-          <Loader2 className="w-5 h-5 text-foreground animate-spin" />
-        ) : (
-          <Download className="w-5 h-5 text-foreground" />
-        )}
-      </button>
 
       {/* Loading Overlay */}
       {isLoading && !viewerFailed && (
@@ -152,24 +116,6 @@ export default function BookViewer() {
               </p>
             </div>
             <div className="flex flex-col gap-3 w-full">
-              <Button 
-                onClick={handleDownload} 
-                disabled={isDownloading}
-                className="w-full"
-                size="lg"
-              >
-                {isDownloading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Mengunduh...
-                  </>
-                ) : (
-                  <>
-                    <Download className="w-4 h-4 mr-2" />
-                    Download PDF
-                  </>
-                )}
-              </Button>
               <Button 
                 onClick={handleOpenInBrowser} 
                 variant="outline"
