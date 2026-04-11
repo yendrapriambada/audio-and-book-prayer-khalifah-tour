@@ -1,5 +1,4 @@
 import { Play, Pause, SkipBack, SkipForward, Loader2, BookOpen } from "lucide-react";
-import { Play, Pause, SkipBack, SkipForward, Loader2, BookOpen } from "lucide-react";
 import { BackButton } from "@/components/BackButton";
 import { useAudio } from "@/context/AudioContext";
 import { Button } from "@/components/ui/button";
