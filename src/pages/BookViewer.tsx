@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Download, Loader2, FileText, ExternalLink } from "lucide-react";
+import { ArrowLeft, Loader2, FileText, ExternalLink } from "lucide-react";
 import { useData } from "@/context/DataContext";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,6 @@ export default function BookViewer() {
   const navigate = useNavigate();
   const book = getBook(bookId || "");
   const [isLoading, setIsLoading] = useState(true);
-  const [isDownloading, setIsDownloading] = useState(false);
   const [useGoogleViewer, setUseGoogleViewer] = useState(false);
   const [viewerFailed, setViewerFailed] = useState(false);
   const [loadTimeout, setLoadTimeout] = useState<NodeJS.Timeout | null>(null);
@@ -152,24 +151,6 @@ export default function BookViewer() {
               </p>
             </div>
             <div className="flex flex-col gap-3 w-full">
-              <Button 
-                onClick={handleDownload} 
-                disabled={isDownloading}
-                className="w-full"
-                size="lg"
-              >
-                {isDownloading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Mengunduh...
-                  </>
-                ) : (
-                  <>
-                    <Download className="w-4 h-4 mr-2" />
-                    Download PDF
-                  </>
-                )}
-              </Button>
               <Button 
                 onClick={handleOpenInBrowser} 
                 variant="outline"
